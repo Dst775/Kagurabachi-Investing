@@ -1,6 +1,7 @@
 @font-face {
     font-family: GlaserBecker;
     src: url("../fonts/GlaserBeckerStencilRegular.ttf");
+
 }
 
 #characterName {
@@ -11,26 +12,80 @@
     font-family: GlaserBecker;
     text-align: left;
     color: white;
-    padding: 1%;
+    padding: 2%;
     padding-right: 5%;
-    min-width: 22vw;
+    min-width: 70%;
+    max-width: 25vw;
+    margin: auto;
+    letter-spacing: .1rem;
+    text-indent: 0.25em;
+}
+
+#characterNameContainer {
+    grid-column-start: 2;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    grid-row-end: 2;
 }
 
 main {
-    background-color: #eee;
+    background-color: white;
     width: 75%;
     margin: auto;
     margin-top: 2vh;
     margin-bottom: 2vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto auto;
+}
+
+#emblem {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    margin: auto;
+    width: 50%;
 }
 
 #radarChart {
-    width: 100%;
+    border: 1px solid black;
+    background-image: url("../images/Chart\ Ring.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position-x: center;
 }
 
 .chart-container {
     position: relative;
-    width: 25vw;
-    /* Adjust container width as needed */
-    height: 25vw;
+    width: 360px;
+    height: 360px;
+    margin: auto;
+
+    grid-column-start: 3;
+    grid-column-end: 5;
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+#subTriggerContainer {
+    background-color: red;
+    width: 100%;
+    height: 100%;
+    
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+#mainTriggerContainer {
+    background-color: green;
+    width: 100%;
+    height: 100%;
+    
+    grid-column-start: 5;
+    grid-column-end: 6;
+    grid-row-start: 2;
+    grid-row-end: 3;
 }

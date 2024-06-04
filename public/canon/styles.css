@@ -32,3 +32,78 @@ char-card {
     flex-basis: 100%;
     height: 0;
 }
+
+.tachikawa {
+    background-color: #c02328;
+    color: black;
+}
+
+.kazama {
+    background-color: #1886d5;
+    color: black;
+}
+
+.arashiyama {
+    background-color: #b22020;
+    color: black;
+}
+
+.miwa {
+    background-color: #7555a2;
+    color: black;
+}
+
+.tamakoma {
+    background-color: #3090c7;
+    color: black;
+}
+
+.ninomiya {
+    background-color: #4364a5;
+    color: black;
+}
+
+.kageura {
+    background-color: #a24878;
+    color: black;
+}
+
+.suzunari {
+    background-color: #40ab6e;
+    color: black;
+}
+
+.azuma {
+    background-color: #188697;
+    color: black;
+}
+
+.katori {
+    background-color: #993366;
+    color: black;
+}
+
+.suwa {
+    background-color: #7bb221;
+    color: black;
+}
+
+.nasu {
+    background-color: #bfa7d2;
+    color: black;
+}
+
+.kakizaki {
+    background-color: #df7322;
+    color: black;
+}
+
+.brank {
+    background-color: #348f60;
+    color: black;
+}
+
+.crank {
+    background-color: #ededef;
+    color: black;
+}

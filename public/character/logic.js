@@ -5,21 +5,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const characterID = queryParams.get("id");
     console.log(`Character ID: ${characterID}`);
 
+    const characterData = CharacterData[Number(characterID || "0")];
+    document.getElementById("characterName").innerText = characterData.Name;
     const ctx = document.getElementById("radarChart").getContext("2d");
     const data = {
         labels: [
-            ['TRION', '6'],
-            ['ATTACK', '14'.padStart(7, ' ')],
-            ['DEFENSE', 'SUPPORT', '9'.padStart(8, ' ')],
-            ['MOBILITY', '8'.padStart(8, ' ')],
-            ['SKILL', '8'],
-            ['RANGE', '2'.padEnd(6, ' ')],
-            ['COMMAND', '7'.padEnd(8, ' ')],
-            ['SPECIAL', 'TACTICS', '4'.padEnd(8, ' ')]
+            ['TRION', `${characterData.Trion || 1}`],
+            ['ATTACK', `${characterData.Attack}`.padStart(7, ' ')],
+            ['DEFENSE', 'SUPPORT', `${characterData.DefenceSupport}`.padStart(8, ' ')],
+            ['MOBILITY', `${characterData.Mobility}`.padStart(8, ' ')],
+            ['SKILL', `${characterData.Skill}`],
+            ['RANGE', `${characterData.Range}`.padEnd(6, ' ')],
+            ['COMMAND', `${characterData.Command}`.padEnd(8, ' ')],
+            ['SPECIAL', 'TACTICS', `${characterData.SpecialTactics}`.padEnd(8, ' ')]
         ],
         datasets: [{
             label: '',
-            data: [6, 14, 9, 8, 8, 2, 7, 4],
+            data: [
+                `${characterData.Trion || 1}`,
+                `${characterData.Attack}`,
+                `${characterData.DefenceSupport}`,
+                `${characterData.Mobility}`,
+                `${characterData.Skill}`,
+                `${characterData.Range}`,
+                `${characterData.Command}`,
+                `${characterData.SpecialTactics}`
+            ],
             fill: true,
             backgroundColor: 'rgba(140,140,140, 0.5)',
             pointStyle: false,
