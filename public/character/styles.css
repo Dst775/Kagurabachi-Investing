@@ -1,0 +1,36 @@
+@font-face {
+    font-family: GlaserBecker;
+    src: url("../fonts/GlaserBeckerStencilRegular.ttf");
+}
+
+#characterName {
+    background-image: url("../images/Character\ Name.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position-x: center;
+    font-family: GlaserBecker;
+    text-align: left;
+    color: white;
+    padding: 1%;
+    padding-right: 5%;
+    min-width: 22vw;
+}
+
+main {
+    background-color: #eee;
+    width: 75%;
+    margin: auto;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+}
+
+#radarChart {
+    width: 100%;
+}
+
+.chart-container {
+    position: relative;
+    width: 25vw;
+    /* Adjust container width as needed */
+    height: 25vw;
+}

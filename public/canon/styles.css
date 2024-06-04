@@ -1,5 +1,5 @@
 .input img {
-    height: 75%;
+    height: 50%;
     filter: invert(56%) sepia(45%) saturate(687%) hue-rotate(97deg) brightness(90%) contrast(92%);
 }
 
@@ -14,12 +14,21 @@ input:focus {
 
 .characterContainer {
     display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
     justify-content: center;
-    width: 100vw;
+    width: 95vw;
+    margin: auto;
 }
 
 char-card {
     padding: 1%;
     border: 1px solid;
     border-radius: .5em;
+    margin: 0.5vw;
+}
+
+.break {
+    flex-basis: 100%;
+    height: 0;
 }

@@ -4,30 +4,22 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Canon</title>
+    <title>Character</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='../styles.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='../index.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='./styles.css'>
     <script src='../main.js'></script>
-    <script src='../character/character.js'></script>
+    <script src='./character.js'></script>
 </head>
 
 <body>
     <header id="header"></header>
 
     <main class="text-center items-center flex flex-col">
-        <label class="input input-bordered flex items-center gap-2">
-            <input type="text" class="grow" placeholder="Search" id="searchInput" />
-            <img src="../images/search.png" />
-        </label>
-        <br />
-        <div class="characterContainer" id="cardContainer">
-            <a href="/character?id=0">
-                <char-card class="btn btn-outline btn-info">
-                    <p class="name">Masafumi Shinoda</p>
-                </char-card>
-            </a>
+        <h1 class="text-4xl" id="characterName">Kei Tachikawa</h1>
+        <div class="chart-container">
+            <canvas id="radarChart"></canvas>
         </div>
     </main>
 
@@ -37,12 +29,8 @@
         </aside>
     </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById("canonNav").classList.add("navSelected");
-        });
-    </script>
-    <script src='./script.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src='./logic.js'></script>
 </body>
 
 </html>
