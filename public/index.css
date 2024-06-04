@@ -1,3 +1,9 @@
+:root {
+    --primary: #00bd8b;
+    --primaryShade: #057b5c;
+    --navSelected: #4bb79a;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -5,4 +11,40 @@
 
 body {
     font-family: Arial, Helvetica, sans-serif;
+}
+
+.navbar a:hover, .navbar label:hover {
+    background-color: var(--primaryShade);
+}
+
+.navSelected {
+    background-color: var(--navSelected);
+}
+
+.navLinks {
+    font-weight: bold;
+}
+
+header .drawer-side {
+    z-index: 2;
+}
+
+main {
+    z-index: 0;
+    min-height: 83.5vh;
+    width: 100%;
+    padding: 0.5%;
+}
+
+.iframe-container {
+    width: 100%;
+    height: 90vh;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    padding: 0.5%;
+    /* Remove default iframe border */
 }

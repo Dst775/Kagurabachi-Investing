@@ -4,7 +4,7 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Page Title</title>
+    <title>Home</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='./styles.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='./index.css'>
@@ -12,7 +12,27 @@
 </head>
 
 <body>
-    <div class="glass">Hello</div>
+    <header id="header"></header>
+
+    <main class="flex flex-1">
+        <div class="hero">
+            <div class="hero-content flex-col lg:flex-row-reverse flex flex-1">
+                <img src="https://static.miraheze.org/worldtriggerwiki/5/54/Border_Emblem_2.png"
+                    class="max-w-sm rounded-lg shadow-2xl" width="15%" />
+                <div>
+                    <h1 class="text-5xl font-bold">Broader Briefing File</h1>
+                    <p class="py-6">The multi-use site connecting <i>World Trigger</i> fans.</p>
+                    <button class="btn btn-info">Get Started</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer footer-center p-4 bg-neutral text-base-content">
+        <aside>
+            <p>Copyright © 2024 - All right reserved by Emperor Bob</p>
+        </aside>
+    </footer>
 </body>
 
 </html>

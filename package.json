@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsx ./src/index.ts",
-    "styles": "npx tailwind -i ./public/tailwind.css -o ./public/styles.css"
+    "styles": "npx tailwind -i ./public/tailwind.css -o ./public/styles.css --watch"
   },
   "author": "",
   "license": "ISC",
