@@ -1303,10 +1303,6 @@ html {
   .btn-info {
     --btn-color: var(--fallback-in);
   }
-
-  .btn-error {
-    --btn-color: var(--fallback-er);
-  }
 }
 
 @supports (color: color-mix(in oklab, black, black)) {
@@ -1356,22 +1352,12 @@ html {
   .btn-info {
     --btn-color: var(--in);
   }
-
-  .btn-error {
-    --btn-color: var(--er);
-  }
 }
 
 .btn-info {
   --tw-text-opacity: 1;
   color: var(--fallback-inc,oklch(var(--inc)/var(--tw-text-opacity)));
   outline-color: var(--fallback-in,oklch(var(--in)/1));
-}
-
-.btn-error {
-  --tw-text-opacity: 1;
-  color: var(--fallback-erc,oklch(var(--erc)/var(--tw-text-opacity)));
-  outline-color: var(--fallback-er,oklch(var(--er)/1));
 }
 
 .btn.glass {
@@ -2124,14 +2110,14 @@ html:has(.drawer-toggle:checked) {
   line-height: 1.75rem;
 }
 
-.text-sm {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-}
-
 .text-xs {
   font-size: 0.75rem;
   line-height: 1rem;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
 }
 
 .font-bold {

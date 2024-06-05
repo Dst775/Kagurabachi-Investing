@@ -35,7 +35,7 @@ main {
     margin-top: 2vh;
     margin-bottom: 2vh;
     display: grid;
-    grid-template-columns: 1.5fr 1fr 0.5fr 0.5fr 1fr;
+    grid-template-columns: 1.5fr 1.5fr 0.5fr 0.5fr 1.5fr;
     grid-template-rows: auto auto;
     align-items: stretch;
 }
@@ -49,8 +49,8 @@ main {
     width: 30%;
 }
 
+/* Chart */
 #radarChart {
-    border: 1px solid black;
     background-image: url("../images/Chart\ Ring.png");
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -69,8 +69,39 @@ main {
     grid-row-end: 3;
 }
 
+#total {
+    color: black;
+    text-align: start;
+    margin-left: 20%;
+    transform: translateY(-50px);
+    font-weight: bold;
+    width: fit-content;
+    padding-left: 0.25em;
+    padding-right: 1em;
+    border-left: 2px solid #111;
+    border-bottom: 2px solid #111;
+    position: relative;
+}
+
+#total::after {
+    content: '';
+    width: 1.5px;
+    height: 100%;
+    background-color: #111;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    transform-origin: bottom left;
+    transform: rotate(45deg);
+}
+
+#totalNumber {
+    margin-left: 0.25em;
+}
+
+/* Triggers */
 #subTriggerContainer {
-    background-color: red;
+    background-color: #111;
     width: 100%;
     height: 100%;
 
@@ -78,10 +109,17 @@ main {
     grid-column-end: 3;
     grid-row-start: 2;
     grid-row-end: 3;
+
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding: 2%;
+    color: white;
+    position: relative;
 }
 
 #mainTriggerContainer {
-    background-color: green;
+    background-color: #111;
     width: 100%;
     height: 100%;
 
@@ -89,8 +127,174 @@ main {
     grid-column-end: 6;
     grid-row-start: 2;
     grid-row-end: 3;
+
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding: 2%;
+    color: white;
+    position: relative;
 }
 
+#mainTriggerContainer::after, #subTriggerContainer::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    z-index: 2;
+
+    border-width: 0.4em;
+    border-top-color: #111;
+    border-left-color: #111;
+    border-right-color: white;
+    border-bottom-color: white;
+}
+
+#mainTriggerContainer::before {
+    content: '';
+    position: absolute;
+    bottom: 5%;
+    left: -2em;
+    width: 0;
+    height: 0;
+    z-index: 2;
+
+    border-top: 2em solid transparent;
+    border-bottom: 2em solid transparent;
+    border-right: 2em solid #111;
+}
+
+#subTriggerContainer::before {
+    content: '';
+    position: absolute;
+    top: 5%;
+    right: -2em;
+    width: 0;
+    height: 0;
+    z-index: 2;
+
+    border-top: 2em solid transparent;
+    border-bottom: 2em solid transparent;
+    border-left: 2em solid #111;
+}
+
+#mainTriggerContainer>p, #subTriggerContainer>p {
+    width: 100%;
+}
+
+#mainTriggerContainer p, #subTriggerContainer p {
+    text-align: start;
+}
+
+.mainSubText {
+    background-color: white;
+    color: #111;
+    padding: 1%;
+    box-sizing: border-box;
+}
+
+.japanese {
+    font-size: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateY(-5px);
+}
+
+trigger-block {
+    background-color: white;
+    color: #111;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 1vh;
+    z-index: 3;
+    position: relative;
+
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 1fr 2fr;
+    padding-left: 2%;
+    padding-top: 2%;
+}
+
+trigger-block::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+
+    border-width: 0.3em;
+    border-top-color: white;
+    border-left-color: white;
+    border-right-color: #111;
+    border-bottom-color: #111;
+}
+
+trigger-block .triggerImage {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 3;
+
+    height: 90%;
+    width: 100%;
+    margin-left: auto;
+    padding: 10%;
+    background-color: #111;
+    position: relative;
+}
+
+trigger-block .triggerImage img {
+    width: 90%;
+    margin: auto;
+}
+
+trigger-block .triggerImage::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+
+    border-width: 0.3em;
+    border-top-color: #111;
+    border-left-color: #111;
+    border-right-color: white;
+    border-bottom-color: white;
+}
+
+trigger-block .triggerType {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+
+    text-indent: 0.5em;
+    font-size: 75%;
+    width: 80%;
+    padding-bottom: 1vh;
+    background-image: url("../images/TriggerLine.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position-x: center;
+    background-position-y: bottom;
+}
+
+trigger-block .triggerName {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+
+    text-indent: 1em;
+}
+
+/* Details */
 #detailsContainer {
     color: black;
     text-align: start;
