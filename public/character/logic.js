@@ -6,6 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log(`Character ID: ${characterID}`);
 
     const characterData = CharacterData[Number(characterID || "0")];
+    document.getElementById("emblem").addEventListener("load", () => {
+        document.querySelector("#emblem").contentDocument.querySelector("#RankText").textContent = "65";
+        document.querySelector("#emblem").contentDocument.querySelector("#RankFill").style.fill = "#DD0022";
+        document.querySelector("#emblem").contentDocument.querySelector("#image1").setAttribute("href", "https://cdn.discordapp.com/attachments/461506770037243915/1247755554462502922/461483989463597057_516213628442247168_xp.png?ex=66612e6a&is=665fdcea&hm=07a2b896610ac72e15a09c3a7028697f3252437a7c931cbfbb5b00dca4bc4dd9&");
+    });
+
     document.getElementById("characterName").innerText = characterData.Name;
     const ctx = document.getElementById("radarChart").getContext("2d");
     const data = {
@@ -32,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 `${characterData.SpecialTactics}`
             ],
             fill: true,
-            backgroundColor: 'rgba(140,140,140, 0.5)',
+            backgroundColor: 'rgba(0,0,0, 0.5)',
             pointStyle: false,
             hoverRadius: 0,
             clip: {

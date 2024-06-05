@@ -38,6 +38,8 @@ main {
     grid-template-columns: 1.5fr 1.5fr 0.5fr 0.5fr 1.5fr;
     grid-template-rows: auto auto;
     align-items: stretch;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 #emblem {
@@ -46,7 +48,20 @@ main {
     grid-row-start: 1;
     grid-row-end: 2;
     margin: auto;
-    width: 30%;
+    width: 40%;
+    animation: fadeIn 1s normal forwards;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    75% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 /* Chart */
@@ -116,6 +131,7 @@ main {
     padding: 2%;
     color: white;
     position: relative;
+    animation: fadeRight 1s ease-out forwards;
 }
 
 #mainTriggerContainer {
@@ -134,6 +150,30 @@ main {
     padding: 2%;
     color: white;
     position: relative;
+
+    animation: fadeLeft 1s ease-out forwards;
+}
+
+@keyframes fadeLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(50%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeRight {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 #mainTriggerContainer::after, #subTriggerContainer::after {
