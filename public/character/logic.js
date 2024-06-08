@@ -1,68 +1,75 @@
-import SquadRankings from "./rankings.js";
-import CharacterData from "./character.js";
-
-document.addEventListener('DOMContentLoaded', () => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var rankings_js_1 = require("./rankings.js");
+var character_js_1 = require("./character.js");
+document.addEventListener('DOMContentLoaded', function () {
     // Get Character
-    const currentURL = window.location.href;
-    const url = new URL(currentURL);
-    const queryParams = new URLSearchParams(url.search);
-    const characterID = queryParams.get("id");
-    const characterData = CharacterData[Number(characterID || "0")];
+    var currentURL = window.location.href;
+    var url = new URL(currentURL);
+    var queryParams = new URLSearchParams(url.search);
+    var characterID = queryParams.get("id");
+    var characterData = character_js_1.default[Number(characterID || "0")];
     // Emblem
-    document.getElementById("emblem").addEventListener("load", () => {
-        document.querySelector("#emblem").contentDocument.querySelector("#RankABC").textContent = SquadRankings[characterData.Squad].rank;
-        document.querySelector("#emblem").contentDocument.querySelector("#RankText").textContent = SquadRankings[characterData.Squad].position;
-        if (SquadRankings[characterData.Squad].rank == "B") {
-            document.querySelector("#emblem").contentDocument.querySelector("#RankText").style.fontSize = "7.9";
+    document.getElementById("emblem").addEventListener("load", function () {
+        var emblemElement = document.querySelector("#emblem");
+        if (emblemElement) {
+            var contentDocument = emblemElement.contentDocument;
+            if (contentDocument) {
+                contentDocument.querySelector("#RankABC").textContent = rankings_js_1.default[characterData.Squad].rank;
+                contentDocument.querySelector("#RankText").textContent = rankings_js_1.default[characterData.Squad].position;
+                if (rankings_js_1.default[characterData.Squad].rank == "B") {
+                    contentDocument.querySelector("#RankText").style.fontSize = "7.9";
+                }
+                contentDocument.querySelector("#RankFill").style.fill = rankings_js_1.default[characterData.Squad].color;
+                contentDocument.querySelector("#image1").setAttribute("href", "");
+            }
         }
-        document.querySelector("#emblem").contentDocument.querySelector("#RankFill").style.fill = SquadRankings[characterData.Squad].color;
-        document.querySelector("#emblem").contentDocument.querySelector("#image1").setAttribute("href", "");
     });
     // Name + Other Text
     document.getElementById("characterName").innerText = characterData["Name (Western)"];
-    document.getElementById("position").innerText = `POSITION: ${characterData.Position.toUpperCase() || "UNKNOWN"}`;
-    document.getElementById("age").innerText = `AGE: ${characterData.Age || "?"} YEARS OLD`;
-    document.getElementById("birthday").innerText = `BIRTHDAY: ${convertDateToString(characterData.BirthMonth, characterData.BirthDay) || "UNKNOWN"}`;
-    document.getElementById("height").innerText = `HEIGHT: ${characterData.Height || "UNKNOWN "}CM`;
-    document.getElementById("bloodType").innerText = `BLOOD TYPE: ${characterData.BloodType || "UNKNOWN"}`;
-    document.getElementById("zodiac").innerText = `ZODIAC: THE ${characterData.Zodiac.toUpperCase() || "UNKNOWN"}`;
+    document.getElementById("position").innerText = "POSITION: ".concat(characterData.Position.toUpperCase() || "UNKNOWN");
+    document.getElementById("age").innerText = "AGE: ".concat(characterData.Age || "?", " YEARS OLD");
+    document.getElementById("birthday").innerText = "BIRTHDAY: ".concat(convertDateToString(characterData.BirthMonth, characterData.BirthDay) || "UNKNOWN");
+    document.getElementById("height").innerText = "HEIGHT: ".concat(characterData.Height || "UNKNOWN ", "CM");
+    document.getElementById("bloodType").innerText = "BLOOD TYPE: ".concat(characterData.BloodType || "UNKNOWN");
+    document.getElementById("zodiac").innerText = "ZODIAC: THE ".concat(characterData.Zodiac.toUpperCase() || "UNKNOWN");
     // document.getElementById("occupation").innerText = `OCCUPATION: ` + characterData.Occupation; // TODO
     // document.getElementById("likes").innerText = `LIKES: ` + characterData.Likes; // TODO
     displayTriggers(characterData);
     // Radar Chart
-    document.getElementById("totalNumber").innerText = characterData.Trion + characterData.Attack + characterData.DefenceSupport + characterData.Mobility + characterData.Skill + characterData.Range + characterData.Command + characterData.SpecialTactics;
-    const ctx = document.getElementById("radarChart").getContext("2d");
-    const data = {
+    document.getElementById("totalNumber").innerText = String(Number(characterData.Trion) + Number(characterData.Attack) + Number(characterData.DefenceSupport) + Number(characterData.Mobility) + Number(characterData.Skill) + Number(characterData.Range) + Number(characterData.Command) + Number(characterData.SpecialTactics));
+    var ctx = document.getElementById("radarChart").getContext("2d");
+    var data = {
         labels: [
-            ['TRION', `${characterData.Trion || 1}`],
-            ['ATTACK', `${characterData.Attack}`.padStart(7, ' ')],
-            ['DEFENSE', 'SUPPORT', `${characterData.DefenceSupport}`.padStart(8, ' ')],
-            ['MOBILITY', `${characterData.Mobility}`.padStart(8, ' ')],
-            ['SKILL', `${characterData.Skill}`],
-            ['RANGE', `${characterData.Range}`.padEnd(6, ' ')],
-            ['COMMAND', `${characterData.Command}`.padEnd(8, ' ')],
-            ['SPECIAL', 'TACTICS', `${characterData.SpecialTactics}`.padEnd(8, ' ')]
+            ['TRION', "".concat(characterData.Trion || 1)],
+            ['ATTACK', "".concat(characterData.Attack).padStart(7, ' ')],
+            ['DEFENSE', 'SUPPORT', "".concat(characterData.DefenceSupport).padStart(8, ' ')],
+            ['MOBILITY', "".concat(characterData.Mobility).padStart(8, ' ')],
+            ['SKILL', "".concat(characterData.Skill)],
+            ['RANGE', "".concat(characterData.Range).padEnd(6, ' ')],
+            ['COMMAND', "".concat(characterData.Command).padEnd(8, ' ')],
+            ['SPECIAL', 'TACTICS', "".concat(characterData.SpecialTactics).padEnd(8, ' ')]
         ],
         datasets: [{
-            label: '',
-            data: [
-                `${characterData.Trion || 1}`,
-                `${characterData.Attack}`,
-                `${characterData.DefenceSupport}`,
-                `${characterData.Mobility}`,
-                `${characterData.Skill}`,
-                `${characterData.Range}`,
-                `${characterData.Command}`,
-                `${characterData.SpecialTactics}`
-            ],
-            fill: true,
-            backgroundColor: 'rgba(0,0,0, 0.5)',
-            pointStyle: false,
-            hoverRadius: 0,
-            clip: {
-                left: 5, top: -400, right: -200, bottom: 0
-            }
-        }]
+                label: '',
+                data: [
+                    "".concat(characterData.Trion || 1),
+                    "".concat(characterData.Attack),
+                    "".concat(characterData.DefenceSupport),
+                    "".concat(characterData.Mobility),
+                    "".concat(characterData.Skill),
+                    "".concat(characterData.Range),
+                    "".concat(characterData.Command),
+                    "".concat(characterData.SpecialTactics)
+                ],
+                fill: true,
+                backgroundColor: 'rgba(0,0,0, 0.5)',
+                pointStyle: false,
+                hoverRadius: 0,
+                clip: {
+                    left: 5, top: -400, right: -200, bottom: 0
+                }
+            }]
     };
     new Chart(ctx, {
         type: 'radar',
@@ -110,28 +117,32 @@ document.addEventListener('DOMContentLoaded', () => {
         },
     });
 });
-
 function displayTriggers(characterData) {
-    const mainTriggers = [characterData.Main1, characterData.Main2, characterData.Main3, characterData.Main4];
-    const subTriggers = [characterData.Sub1, characterData.Sub2, characterData.Sub3, characterData.Sub4];
-    console.log(mainTriggers);
-    for (let i = 1; i <= 4; i++) {
-        document.getElementById(`main${i}Image`).setAttribute("src", getTriggerImage(mainTriggers[i - 1]));
-        document.getElementById(`main${i}Name`).innerText = mainTriggers[i - 1].toUpperCase();
-        document.getElementById(`main${i}Type`).innerText = getTriggerType(mainTriggers[i - 1]);
-
-        document.getElementById(`sub${i}Image`).setAttribute("src", getTriggerImage(subTriggers[i - 1]));
-        document.getElementById(`sub${i}Name`).innerText = subTriggers[i - 1].toUpperCase();
-        document.getElementById(`sub${i}Type`).innerText = getTriggerType(subTriggers[i - 1]);
+    var mainTriggers = [characterData.Main1, characterData.Main2, characterData.Main3, characterData.Main4];
+    var subTriggers = [characterData.Sub1, characterData.Sub2, characterData.Sub3, characterData.Sub4];
+    for (var i = 1; i <= 4; i++) {
+        if (mainTriggers[i - 1] === "") {
+            document.getElementById("mainTrigger".concat(i)).classList.add("freeTrigger");
+        }
+        else {
+            document.getElementById("mainTrigger".concat(i)).classList.remove("freeTrigger");
+        }
+        document.getElementById("main".concat(i, "Image")).setAttribute("src", getTriggerImage(mainTriggers[i - 1]));
+        document.getElementById("main".concat(i, "Name")).innerText = mainTriggers[i - 1].toUpperCase().replace(":", ":\n") || "FREE TRIGGER";
+        document.getElementById("main".concat(i, "Type")).innerText = getTriggerType(mainTriggers[i - 1]);
+        if (subTriggers[i - 1] === "") {
+            document.getElementById("subTrigger".concat(i)).classList.add("freeTrigger");
+        }
+        else {
+            document.getElementById("subTrigger".concat(i)).classList.remove("freeTrigger");
+        }
+        document.getElementById("sub".concat(i, "Image")).setAttribute("src", getTriggerImage(subTriggers[i - 1]));
+        document.getElementById("sub".concat(i, "Name")).innerText = subTriggers[i - 1].toUpperCase().replace(":", ":\n") || "FREE TRIGGER";
+        document.getElementById("sub".concat(i, "Type")).innerText = getTriggerType(subTriggers[i - 1]);
     }
 }
-
-/**
- * 
- * @param {String} triggerName 
- */
 function getTriggerImage(triggerName) {
-    const triggerImageMap = {
+    var triggerImageMap = {
         "Opt": "../images/triggers/opt.png",
         "Shield": "../images/triggers/shi.png",
         "Switchbox": "../images/triggers/switchbox.png",
@@ -160,16 +171,15 @@ function getTriggerImage(triggerName) {
     if (triggerName === "") {
         return triggerImageMap.Free;
     }
-    for (const currentTrigger in triggerImageMap) {
+    for (var currentTrigger in triggerImageMap) {
         if (triggerName.includes(currentTrigger)) {
             return triggerImageMap[currentTrigger];
         }
     }
     return triggerImageMap.Opt;
 }
-
 function getTriggerType(triggerName) {
-    const triggerTypeMap = {
+    var triggerTypeMap = {
         "Opt": "OPTION TRIGGER",
         "Shield": "DEFENSE TRIGGER",
         "Switchbox": "TRAPPER TRIGGER",
@@ -198,30 +208,30 @@ function getTriggerType(triggerName) {
     if (triggerName === "") {
         return triggerTypeMap.Free;
     }
-    for (const currentTrigger in triggerTypeMap) {
+    for (var currentTrigger in triggerTypeMap) {
         if (triggerName.includes(currentTrigger)) {
             return triggerTypeMap[currentTrigger];
         }
     }
     return triggerTypeMap.Opt;
 }
-
 function convertDateToString(month, day) {
     if (month === "" || day === "") {
         return "";
     }
-    const months = [
+    var months = [
         "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
         "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
     ];
-
-    const monthName = months[month - 1];
-    const ordinalSuffix = getOrdinalSuffix(day);
-    return `${monthName} ${day}${ordinalSuffix}`;
+    var monthNum = Number(month);
+    var dayNum = Number(day);
+    var monthName = months[monthNum - 1];
+    var ordinalSuffix = getOrdinalSuffix(dayNum);
+    return "".concat(monthName, " ").concat(day).concat(ordinalSuffix);
 }
-
 function getOrdinalSuffix(day) {
-    if (day > 3 && day < 21) return "TH";
+    if (day > 3 && day < 21)
+        return "TH";
     switch (day % 10) {
         case 1: return "ST";
         case 2: return "ND";

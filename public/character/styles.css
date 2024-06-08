@@ -56,9 +56,11 @@ main {
     0% {
         opacity: 0;
     }
+
     75% {
         opacity: 0;
     }
+
     100% {
         opacity: 1;
     }
@@ -159,6 +161,7 @@ main {
         opacity: 0;
         transform: translateX(50%);
     }
+
     100% {
         opacity: 1;
         transform: translateX(0);
@@ -170,6 +173,7 @@ main {
         opacity: 0;
         transform: translateX(-50%);
     }
+
     100% {
         opacity: 1;
         transform: translateX(0);
@@ -268,8 +272,8 @@ trigger-block::after {
     height: 0;
 
     border-width: 0.3em;
-    border-top-color: white;
-    border-left-color: white;
+    border-top-color: transparent;
+    border-left-color: transparent;
     border-right-color: #111;
     border-bottom-color: #111;
 }
@@ -281,7 +285,7 @@ trigger-block .triggerImage {
     grid-row-end: 3;
 
     height: 90%;
-    width: 100%;
+    width: 90%;
     margin-left: auto;
     padding: 10%;
     background-color: #111;
@@ -289,8 +293,7 @@ trigger-block .triggerImage {
 }
 
 trigger-block .triggerImage img {
-    width: 70%;
-    aspect-ratio: 1 1;
+    width: 90%;
     margin: auto;
 }
 
@@ -332,7 +335,20 @@ trigger-block .triggerName {
     grid-row-start: 2;
     grid-row-end: 3;
 
-    text-indent: 1em;
+    padding-left: 1em;
+    width: 90%;
+}
+
+.freeTrigger {
+    background-color: #636363;
+}
+
+.freeTrigger .triggerImage {
+    opacity: 0;
+}
+
+.freeTrigger .triggerType {
+    opacity: 0;
 }
 
 /* Details */
