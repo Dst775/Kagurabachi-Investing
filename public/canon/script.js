@@ -44,7 +44,7 @@ function loadDom(filter = "") {
 
         const p = document.createElement("p");
         p.classList.add("name");
-        p.innerText = character.Name;
+        p.innerText = character["Name (Western)"];
 
         card.appendChild(p);
         a.appendChild(card);

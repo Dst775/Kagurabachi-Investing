@@ -289,7 +289,8 @@ trigger-block .triggerImage {
 }
 
 trigger-block .triggerImage img {
-    width: 90%;
+    width: 70%;
+    aspect-ratio: 1 1;
     margin: auto;
 }
 
