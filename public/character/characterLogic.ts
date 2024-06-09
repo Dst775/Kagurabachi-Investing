@@ -1,59 +1,6 @@
-import SquadRankings from "./rankings.js";
-import CharacterData from "./character.js";
+import { SquadRankings, Ranking, RankingSquad } from "./rankings.js";
+import { CharacterData, Character } from "./character.js";
 declare const Chart: any;
-interface Character {
-    "Name (Western)": string;
-    "Name": string;
-    "Gender": string;
-    "Age": number | string;
-    "BirthMonth": number | string;
-    "BirthDay": number | string;
-    "Height": number | string;
-    "BloodType": string;
-    "HairColour": string;
-    "HairReal": string;
-    "EyeColour": string;
-    "EyeReal": string;
-    "Handedness": string;
-    "Glasses": string;
-    "SideEffect": number;
-    "PreferencePersonality": number | string;
-    "PreferenceLooks": number | string;
-    "PopularityActual": number | string;
-    "PopularityWanted": number | string;
-    "StaminaStrength": number | string;
-    "Exercise": number | string;
-    "Grades": number | string;
-    "SportsArts": number | string;
-    "TimeInBorder": number | string;
-    "Faction": number | string;
-    "Position": string;
-    "PosNoAllround": string;
-    "Rank": string;
-    "Trion": number | string;
-    "Attack": number | string;
-    "DefenceSupport": number | string;
-    "Mobility": number | string;
-    "Skill": number | string;
-    "Range": number | string;
-    "Command": number | string;
-    "SpecialTactics": number | string;
-    "MechanicsOperation": number | string;
-    "DataAnalysis": number | string;
-    "ParallelProcessing": number | string;
-    "Tactics": number | string;
-    "Main1": string;
-    "Main2": string;
-    "Main3": string;
-    "Main4": string;
-    "Sub1": string;
-    "Sub2": string;
-    "Sub3": string;
-    "Sub4": string;
-    "Squad": string;
-    "Zodiac": string;
-    "Family": string;
-}
 
 document.addEventListener('DOMContentLoaded', () => {
     // Get Character
@@ -68,13 +15,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (emblemElement) {
             const contentDocument = emblemElement.contentDocument;
             if (contentDocument) {
-                contentDocument.querySelector("#RankABC")!.textContent = SquadRankings[characterData.Squad].rank;
-                contentDocument.querySelector("#RankText")!.textContent = SquadRankings[characterData.Squad].position;
-                if (SquadRankings[characterData.Squad].rank == "B") {
+                const squadRanking: Ranking = (SquadRankings as RankingSquad)[characterData.Squad];
+                contentDocument.querySelector("#RankABC")!.textContent = squadRanking.rank;
+                contentDocument.querySelector("#RankText")!.textContent = squadRanking.position;
+                if (squadRanking.rank == "B") {
                     (contentDocument.querySelector("#RankText") as HTMLElement)!.style.fontSize = "7.9";
                 }
-                (contentDocument.querySelector("#RankFill") as HTMLElement)!.style.fill = SquadRankings[characterData.Squad].color;
-                contentDocument.querySelector("#image1")!.setAttribute("href", "");
+                (contentDocument.querySelector("#RankFill") as HTMLElement)!.style.fill = squadRanking.color;
+                contentDocument.querySelector("#image1")!.setAttribute("href", squadRanking.emblem);
             }
         }
     });
@@ -195,7 +143,10 @@ function displayTriggers(characterData: Character) {
 }
 
 function getTriggerImage(triggerName: string): string {
-    const triggerImageMap = {
+    interface ImageMap {
+        [key: string]: string;
+    }
+    const triggerImageMap: ImageMap = {
         "Opt": "../images/triggers/opt.png",
         "Shield": "../images/triggers/shi.png",
         "Switchbox": "../images/triggers/switchbox.png",
@@ -215,7 +166,7 @@ function getTriggerImage(triggerName: string): string {
         "Meteor": "../images/triggers/mete.png",
         "Viper": "../images/triggers/viper.png",
         // Attacker
-        "Kogetsu": "../images/triggers/koget.png",
+        "Kogetsu": "../images/triggers/kog.png",
         "Raygust": "../images/triggers/ray.png",
         "Scorpion": "../images/triggers/sco.png",
         "spear": "../images/triggers/speark.png",
@@ -233,7 +184,10 @@ function getTriggerImage(triggerName: string): string {
 }
 
 function getTriggerType(triggerName: string): string {
-    const triggerTypeMap = {
+    interface TypeMap {
+        [key: string]: string;
+    }
+    const triggerTypeMap: TypeMap = {
         "Opt": "OPTION TRIGGER",
         "Shield": "DEFENSE TRIGGER",
         "Switchbox": "TRAPPER TRIGGER",

@@ -1,6 +1,6 @@
 "use strict";
-import CharacterData from "../character/character.js";
-import SquadRankings from "../character/rankings.js";
+import { CharacterData } from "../compiledTS/character.js";
+import { SquadRankings } from "../compiledTS/rankings.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     loadDom();
@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 const searchInput = document.getElementById("searchInput");
 document.addEventListener("keydown", (e) => {
-    if(e.ctrlKey && e.key === "f") {
+    if (e.ctrlKey && e.key === "f") {
         // Ctrl + F
         e.preventDefault();
         searchInput.focus();

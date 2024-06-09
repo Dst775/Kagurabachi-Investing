@@ -1,4 +1,4 @@
-const CharacterData = [
+export const CharacterData = [
     {
         "Name (Western)": "Enedora",
         "Name": "Enedora",
@@ -7950,5 +7950,3 @@ const CharacterData = [
         "Family": "GF, F, M, OB (x 2)"
     }
 ];
-
-export default CharacterData;
