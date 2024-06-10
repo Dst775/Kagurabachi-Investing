@@ -213,12 +213,12 @@ export const SquadRankings = {
         "color": "#DD0000",
         "rank": "/",
         "position": "/",
-        "emblem": "../images/emblems/Border.png"
+        "emblem": "../images/emblems/Neighbor.png"
     },
     "Galopoula": {
         "color": "#DD0000",
         "rank": "/",
         "position": "/",
-        "emblem": "../images/emblems/Border.png"
+        "emblem": "../images/emblems/Neighbor.png"
     }
 };
