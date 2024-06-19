@@ -11,6 +11,6 @@
       "lib": ["DOM", "ES6"],
       "incremental": true
     },
-    "include": ["public/**/*.ts"],
+    "include": ["public/**/*.ts", "public/**/*.d.ts"],
     "exclude": ["node_modules", "dist", "public/compiledTS"]
   }  

@@ -8,7 +8,10 @@
         "forceConsistentCasingInFileNames": true,
         "outDir": "./src/compiledTS",
         "allowJs": true,
-        "lib": ["DOM", "ES6"]
+        "lib": ["DOM", "ES6"],
+        "typeRoots": [
+            "./src/*.d.ts"
+        ]
     },
     "include": ["src/**/*"],
     "exclude": ["node_modules", "dist"]
