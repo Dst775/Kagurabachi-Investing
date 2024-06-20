@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Investing</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='../styles.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='../index.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./styles.css'>
+    <script src='../main.js'></script>
+</head>
+
+<body>
+    <header id="header"></header>
+
+    <main class="text-center items-center flex flex-col">
+        <div id="barWrapper">
+            <canvas id="barGraph"></canvas>
+        </div>
+        <section id="rangeInputs">
+            <div class="rangeRow">
+                <span class="rangeValues" id="minRangeDisplay">0</span>
+                <div class="sliderContainer">
+                    <input value="0" min="0" max="34" step="1" type="range" id="minRange" class="slider" />
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer footer-center p-4 bg-neutral text-base-content">
+        <aside>
+            <p>Copyright © 2024 - Some rights reserved by Emperor Bob</p>
+        </aside>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById("investingNav").classList.add("navSelected");
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src='./script.js' type="module"></script>
+</body>
+
+</html>

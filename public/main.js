@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <!-- Sidebar content here -->
                         <li><a href="/">Home</a></li>
                         <li><a href="/canon">Canon</a></li>
+                        <li><a href="/investing">Investing</a></li>
                         <li><a href="/ocmaker">OC Maker v1</a></li>
                         <li><a href="/ocmaker2">OC Maker v2</a></li>
                     </ul>
@@ -36,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="flex-none navLinks hidden lg:flex">
             <ul class="menu menu-horizontal px-1">
                 <li><a href="/canon" id="canonNav">Canon</a></li>
+                <li><a href="/investing" id="investingNav">Investing</a></li>
                 <li><a href="/ocmaker" id="ocMakerNav">OC Maker v1</a></li>
                 <li><a href="/ocmaker2" id="ocMaker2Nav">OC Maker v2</a></li>
             </ul>
