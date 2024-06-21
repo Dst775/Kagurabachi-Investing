@@ -4,77 +4,84 @@ const datasets = [
         label: 'Utagawa Squad 1',
         data: getRandomData(chapterCount),
         fill: false,
-        borderColor: 'rgb(180,140,228)',
+        borderColor: 'rgba(180,140,228, 1.0)',
         tension: 0.1
     },
     {
         label: 'Oji Squad 2',
         data: getRandomData(chapterCount),
         fill: false,
-        borderColor: 'rgb(75, 192, 192)',
+        borderColor: 'rgba(75, 192, 192, 1.0)',
         tension: 0.1
     },
     {
-        label: 'Asahi Squad 3',
+        label: 'Kakizaki Squad 3',
         data: getRandomData(chapterCount),
         fill: false,
-        borderColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgba(255, 99, 132, 1.0)',
         tension: 0.1
     },
     {
-        label: 'Kawasaki Squad 4',
+        label: 'Kitazoe Squad 4',
         data: getRandomData(chapterCount),
         fill: false,
-        borderColor: 'rgb(54, 162, 2chapterCount)',
+        borderColor: 'rgba(54, 162, 235, 1.0)',
         tension: 0.1
     },
     {
-        label: 'Yamato Squad 5',
+        label: 'Kuruma Squad 5',
         data: getRandomData(chapterCount),
         fill: false,
-        borderColor: 'rgb(255, 206, 86)',
+        borderColor: 'rgba(255, 206, 86, 1.0)',
         tension: 0.1
     },
     {
-        label: 'Nagoya Squad 6',
+        label: 'Kodera Squad 6',
         data: getRandomData(chapterCount),
         fill: false,
-        borderColor: 'rgb(153, 102, 255)',
+        borderColor: 'rgba(153, 102, 255, 1.0)',
         tension: 0.1
     },
     {
-        label: 'Kyoto Squad 7',
+        label: 'Suwa Squad 7',
         data: getRandomData(chapterCount),
         fill: false,
-        borderColor: 'rgb(255, 159, 64)',
+        borderColor: 'rgba(255, 159, 64, 1.0)',
         tension: 0.1
     },
     {
-        label: 'Sapporo Squad 8',
+        label: 'Ninomiya Squad 8',
         data: getRandomData(chapterCount),
         fill: false,
-        borderColor: 'rgb(75, 192, 192)',
+        borderColor: 'rgba(75, 192, 192, 1.0)',
         tension: 0.1
     },
     {
-        label: 'Sendai Squad 9',
+        label: 'Mizukami Squad 9',
         data: getRandomData(chapterCount),
         fill: false,
-        borderColor: 'rgb(255, 99, 71)',
+        borderColor: 'rgba(255, 99, 71, 1.0)',
         tension: 0.1
     },
     {
-        label: 'Kobe Squad 10',
+        label: 'Murakami Squad 10',
         data: getRandomData(chapterCount),
         fill: false,
-        borderColor: 'rgb(75, 0, 130)',
+        borderColor: 'rgba(75, 0, 130, 1.0)',
         tension: 0.1
     },
     {
-        label: 'Fukuoka Squad 11',
+        label: 'Wakamura Squad 11',
         data: getRandomData(chapterCount),
         fill: false,
-        borderColor: 'rgb(60, 179, 113)',
+        borderColor: 'rgba(60, 179, 113, 1.0)',
+        tension: 0.1
+    },
+    {
+        label: 'Brian',
+        data: getRandomData(chapterCount),
+        fill: false,
+        borderColor: 'rgba(255, 255, 255, 1.0)',
         tension: 0.1
     }
 ];
@@ -119,7 +126,9 @@ const labels = [
 let chart;
 
 document.addEventListener('DOMContentLoaded', () => {
-    const ctx = document.getElementById("barGraph").getContext("2d");
+    const canvas = document.getElementById("barGraph");
+    const ctx = canvas.getContext("2d");
+    canvas.height = window.innerHeight * 0.8;
     const data = {
         labels: labels,
         datasets: datasets
@@ -128,6 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
         type: 'line',
         data: data,
         options: {
+            maintainAspectRatio: false,
             scales: {
                 x: {
                     ticks: {
@@ -150,7 +160,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 legend: {
                     labels: {
                         color: 'white'
-                    }
+                    },
+                    onHover: handleHover,
+                    onLeave: handleLeave
                 }
             }
         }
@@ -172,7 +184,7 @@ function updateChart() {
     chart.data.labels = trimmedLabels;
     chart.update();
 
-    document.getElementById("minRangeDisplay").innerText = minValue;
+    document.getElementById("minRangeDisplay").innerText = 207 + minValue;
 }
 
 function getRandomData(numPoints) {
@@ -181,4 +193,24 @@ function getRandomData(numPoints) {
         data.push(Math.floor(Math.random() * 101));
     }
     return data;
+}
+
+// From Chart.JS
+
+// Append '4d' to the colors (alpha channel), except for the hovered index
+function handleHover(evt, item, legend) {
+    datasets.forEach((data) => {
+        if (data.label != item.text) {
+            data.borderColor = data.borderColor.replace("1.0", "0.0");
+        }
+    });
+    chart.update();
+}
+
+// Removes the alpha channel from background colors
+function handleLeave(evt, item, legend) {
+    datasets.forEach((data) => {
+        data.borderColor = data.borderColor.replace("0.0", "1.0");
+    });
+    chart.update();
 }
