@@ -48,3 +48,12 @@ iframe {
     padding: 0.5%;
     /* Remove default iframe border */
 }
+
+#navbarPfp {
+    width: 80%;
+}
+
+#navbarPfp:hover {
+    background-color: var(--primaryShade);
+    border-radius: 25%;
+}

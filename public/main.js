@@ -1,7 +1,11 @@
+"use strict";
+
+let userID, userName;
+
 document.addEventListener('DOMContentLoaded', () => {
     // Select the target element
     const headerElement = document.getElementById('header');
-    headerElement.innerHTML = `
+    /*headerElement.innerHTML = `
     <div class="navbar bg-success text-accent-content">
         <!--Navbar-->
         <div class="flex-none">
@@ -43,5 +47,66 @@ document.addEventListener('DOMContentLoaded', () => {
             </ul>
         </div>
     </div>
-`;
-});  
+`;*/
+
+    getJWT();
+});
+
+async function getJWT() {
+    const data = await fetch("/auth/cookie");
+    const tokenJSON = await data.json();
+
+    if (data.status == 200) {
+        // Success
+        loggedInDropdown(tokenJSON);
+        localStorage.setItem("token", tokenJSON.token);
+    } else {
+        const list = document.getElementById("profileDropdownList");
+        list.innerHTML = ``;
+
+        localStorage.removeItem("token");
+
+        const loginLI = document.createElement("li");
+        const loginA = document.createElement("a");
+        loginA.id = "loginButton";
+        loginA.innerText = `Login`;
+        loginLI.appendChild(loginA);
+        list.appendChild(loginLI);
+
+        loginA.addEventListener("click", () => {
+            document.getElementById("loginModal").showModal();
+        });
+    }
+}
+
+function loggedInDropdown(tokenJSON) {
+    const list = document.getElementById("profileDropdownList");
+    list.innerHTML = ``;
+
+    userName = tokenJSON.msg.name;
+    userID = tokenJSON.msg.userID;
+
+    const nameLI = document.createElement("li");
+    const nameA = document.createElement("a");
+    nameA.innerText = `Logged in as ${tokenJSON.msg.name}`;
+    nameLI.appendChild(nameA);
+    list.appendChild(nameLI);
+
+    const logoutLI = document.createElement("li");
+    const logoutA = document.createElement("a");
+    logoutA.id = "logoutButton";
+    logoutA.innerText = `Logout`;
+    logoutLI.appendChild(logoutA);
+    list.appendChild(logoutLI);
+
+    logoutA.addEventListener("click", logout);
+}
+
+function login() {
+
+}
+
+async function logout() {
+    await fetch("/auth/logout");
+    getJWT();
+}

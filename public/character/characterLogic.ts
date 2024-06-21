@@ -232,8 +232,8 @@ function convertDateToString(month: string | number, day: string | number): stri
         "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
         "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
     ];
-    let monthNum: number = Number(month);
-    let dayNum: number = Number(day);
+    const monthNum: number = Number(month);
+    const dayNum: number = Number(day);
 
     const monthName = months[monthNum - 1];
     const ordinalSuffix = getOrdinalSuffix(dayNum);

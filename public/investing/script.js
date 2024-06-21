@@ -198,7 +198,7 @@ function getRandomData(numPoints) {
 // From Chart.JS
 
 // Append '4d' to the colors (alpha channel), except for the hovered index
-function handleHover(evt, item, legend) {
+function handleHover(evt, item) {
     datasets.forEach((data) => {
         if (data.label != item.text) {
             data.borderColor = data.borderColor.replace("1.0", "0.0");
@@ -208,7 +208,7 @@ function handleHover(evt, item, legend) {
 }
 
 // Removes the alpha channel from background colors
-function handleLeave(evt, item, legend) {
+function handleLeave() {
     datasets.forEach((data) => {
         data.borderColor = data.borderColor.replace("0.0", "1.0");
     });

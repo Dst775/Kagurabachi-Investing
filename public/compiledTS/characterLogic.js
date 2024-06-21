@@ -1,5 +1,6 @@
 import { SquadRankings } from "./rankings.js";
 import { CharacterData } from "./character.js";
+
 document.addEventListener('DOMContentLoaded', () => {
     // Get Character
     const currentURL = window.location.href;

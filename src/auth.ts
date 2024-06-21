@@ -24,7 +24,7 @@ router.post("/register", bodyCheck, async (req, res) => {
         return res.status(401).json({ msg: "Missing Field" });
     }
     // Unique Username and Valid Email
-    let nameAlreadyUsed = await User.findOne({ name: inputs.name });
+    const nameAlreadyUsed = await User.findOne({ name: inputs.name });
     if (nameAlreadyUsed !== null) {
         return res.status(403).json({ msg: "Failed - Name Taken" });
     }
@@ -58,14 +58,20 @@ router.post("/login", bodyCheck, async (req, res) => {
             secure: true
         });
 
-        return res.status(200).json({ msg: "Success" });
+        return res.status(200).json({ msg: "Success", token: token });
     }
     return res.status(401).json({ msg: "Incorrect Password" });
 });
 
+router.get("/logout", jwtCheck, (req, res) => {
+    // const token = req.user;
+    res.clearCookie("token");
+    res.json({ msg: "Cleared Cookie" });
+});
+
 router.get("/cookie", jwtCheck, (req, res) => {
     const token = req.user;
-    return res.send(`Welcome ${token?.name}`);
+    return res.json({ msg: token, token: req.cookies.token });
 });
 
 export async function connectToDB() {
@@ -101,11 +107,11 @@ function decodeJWT(token: string): JwtPayload | null {
 function jwtCheck(req: Request, res: Response, next: NextFunction) {
     const token: string | undefined = req.cookies.token;
     if (!token) {
-        return res.status(401).send('Access denied. No token provided.');
+        return res.status(401).json({ msg: 'Access denied. No token provided.' });
     }
     const jwtToken = decodeJWT(token);
     if (jwtToken === null) {
-        return res.status(400).send("Invalid Token");
+        return res.status(400).json({ msg: "Invalid Token" });
     }
     req.user = jwtToken;
     next();
