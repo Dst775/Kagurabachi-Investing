@@ -57,3 +57,22 @@ iframe {
     background-color: var(--primaryShade);
     border-radius: 25%;
 }
+
+#globalToastContainer {
+    z-index: 10000;
+    position: relative;
+    pointer-events: none;
+}
+
+#globalToastContainer>div {
+    opacity: 1;
+    transform: translateY(100px);
+    animation: slide-up 1s ease-out forwards;
+    margin-bottom: 1vh;
+}
+
+@keyframes slide-up {
+    to {
+        transform: translateY(0);
+    }
+}
