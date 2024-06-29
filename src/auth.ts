@@ -4,6 +4,7 @@ import { User } from './schemas/user';
 import bcrypt from 'bcrypt';
 import cookieParser from 'cookie-parser';
 import jwt from 'jsonwebtoken';
+import Filter from 'bad-words';
 
 export const router = express.Router();
 export interface JwtPayload {
@@ -11,6 +12,7 @@ export interface JwtPayload {
     userID: string;
 };
 const SALT_ROUNDS = 10;
+const badWordsFilter = new Filter();
 
 router.use(cookieParser());
 
@@ -27,7 +29,7 @@ router.post("/register", reqHasBody, async (req, res) => {
     if (validNamePassword.msg !== "") {
         return res.status(403).json(validNamePassword);
     }
-    // Unique Username and Valid Email
+    // Unique Username
     const nameAlreadyUsed = await User.findOne({ name: inputs.name });
     if (nameAlreadyUsed !== null) {
         return res.status(403).json({ msg: "Failed - Name Taken" });
@@ -42,9 +44,9 @@ router.post("/register", reqHasBody, async (req, res) => {
     return res.status(200).json({ msg: "Success" });
 });
 
-function registerNamePasswordCheck(name, password) {
+function registerNamePasswordCheck(name: string, password: string) {
     if (name.length < 3) {
-        return { msg: "Name must be longer than 3 characters!" };
+        return { msg: "Name must be at least 3 characters!" };
     }
     if (name.length > 20) {
         return { msg: "Name must be less than or equal to 20 characters!" };
@@ -54,6 +56,9 @@ function registerNamePasswordCheck(name, password) {
     }
     if (password.length > 30) {
         return { msg: "Password must be less than or equal to 30 characters!" }
+    }
+    if (badWordsFilter.isProfane(name)) {
+        return { msg: `Username is Profane: ${badWordsFilter.clean(name)}` };
     }
     return { msg: "" };
 }

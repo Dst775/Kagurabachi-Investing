@@ -76,3 +76,30 @@ iframe {
         transform: translateY(0);
     }
 }
+
+/* For Blocked off Areas */
+#loggedInArea {
+    position: relative;
+}
+
+#loggedInContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    color: oklch(var(--er));
+    background-color: oklch(var(--sc));
+    z-index: 100;
+}
+
+#loggedInArea.blockedArea>#loggedInContainer>#notLoggedInText {
+    font-weight: bold;
+}
+
+#loggedInArea.blockedArea {
+    display: block;
+}
