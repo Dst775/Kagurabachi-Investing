@@ -18,10 +18,14 @@ router.get("/", (req, res) => {
     res.json({ msg: "Auth Route" });
 });
 
-router.post("/register", bodyCheck, async (req, res) => {
+router.post("/register", reqHasBody, async (req, res) => {
     const inputs = req.body;
     if (isAnyArgUndefined(inputs, ["name", "password"])) {
         return res.status(401).json({ msg: "Missing Field" });
+    }
+    const validNamePassword = registerNamePasswordCheck(inputs.name, inputs.password);
+    if (validNamePassword.msg !== "") {
+        return res.status(403).json(validNamePassword);
     }
     // Unique Username and Valid Email
     const nameAlreadyUsed = await User.findOne({ name: inputs.name });
@@ -35,10 +39,26 @@ router.post("/register", bodyCheck, async (req, res) => {
         name: inputs.name,
         password: hashedPassword
     });
-    return res.status(201).json({ msg: "Success" });
+    return res.status(200).json({ msg: "Success" });
 });
 
-router.post("/login", bodyCheck, async (req, res) => {
+function registerNamePasswordCheck(name, password) {
+    if (name.length < 3) {
+        return { msg: "Name must be longer than 3 characters!" };
+    }
+    if (name.length > 20) {
+        return { msg: "Name must be less than or equal to 20 characters!" };
+    }
+    if (password.length < 6) {
+        return { msg: "Password must be longer than 6 characters!" }
+    }
+    if (password.length > 30) {
+        return { msg: "Password must be less than or equal to 30 characters!" }
+    }
+    return { msg: "" };
+}
+
+router.post("/login", reqHasBody, async (req, res) => {
     const inputs = req.body;
     if (isAnyArgUndefined(inputs, ["name", "password"])) {
         return res.status(401).json({ msg: "Missing Field" });
@@ -83,7 +103,11 @@ export async function connectToDB() {
     }
 }
 
-function bodyCheck(req: Request, res: Response, next: NextFunction) {
+/**
+ * Middleware to make sure the request has a body.
+ * Useful for POST since they need a JSON Body.
+ */
+export function reqHasBody(req: Request, res: Response, next: NextFunction) {
     if (!req.body) {
         return res.status(400).json({ msg: "Missing Request Body" });
     }
@@ -95,7 +119,7 @@ function bodyCheck(req: Request, res: Response, next: NextFunction) {
  * @param token 
  * @returns Return the JwtPayload if valid otherwise null
  */
-function decodeJWT(token: string): JwtPayload | null {
+export function decodeJWT(token: string): JwtPayload | null {
     try {
         // Verify the JWT
         return jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload;
@@ -104,7 +128,7 @@ function decodeJWT(token: string): JwtPayload | null {
     }
 }
 
-function jwtCheck(req: Request, res: Response, next: NextFunction) {
+export function jwtCheck(req: Request, res: Response, next: NextFunction) {
     const token: string | undefined = req.cookies.token;
     if (!token) {
         return res.status(401).json({ msg: 'Access denied. No token provided.' });
@@ -117,7 +141,7 @@ function jwtCheck(req: Request, res: Response, next: NextFunction) {
     next();
 }
 
-function isAnyArgUndefined(inputs: object, argList: string[]) {
+export function isAnyArgUndefined(inputs: object, argList: string[]) {
     for (const arg of argList) {
         if (inputs[arg] === undefined) {
             return true;

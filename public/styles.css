@@ -1521,14 +1521,6 @@ html {
   padding: 1rem;
 }
 
-.alert-info {
-  border-color: var(--fallback-in,oklch(var(--in)/0.2));
-  --tw-text-opacity: 1;
-  color: var(--fallback-inc,oklch(var(--inc)/var(--tw-text-opacity)));
-  --alert-bg: var(--fallback-in,oklch(var(--in)/1));
-  --alert-bg-mix: var(--fallback-b1,oklch(var(--b1)/1));
-}
-
 .alert-success {
   border-color: var(--fallback-su,oklch(var(--su)/0.2));
   --tw-text-opacity: 1;
@@ -2607,20 +2599,8 @@ html:has(.drawer-toggle:checked) {
   position: static;
 }
 
-.absolute {
-  position: absolute;
-}
-
-.relative {
-  position: relative;
-}
-
 .z-\[1\] {
   z-index: 1;
-}
-
-.z-0 {
-  z-index: 0;
 }
 
 .m-auto {

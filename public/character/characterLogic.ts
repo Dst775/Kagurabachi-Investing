@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ctx = (document.getElementById("radarChart") as HTMLCanvasElement)!.getContext("2d");
     const data = {
         labels: [
-            ['TRION', `${characterData.Trion || 1}`],
+            ['TRION', `${characterData.Trion}`],
             ['ATTACK', `${characterData.Attack}`.padStart(7, ' ')],
             ['DEFENSE', 'SUPPORT', `${characterData.DefenceSupport}`.padStart(8, ' ')],
             ['MOBILITY', `${characterData.Mobility}`.padStart(8, ' ')],

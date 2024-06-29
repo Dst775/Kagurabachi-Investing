@@ -1,6 +1,5 @@
 import { SquadRankings } from "./rankings.js";
 import { CharacterData } from "./character.js";
-
 document.addEventListener('DOMContentLoaded', () => {
     // Get Character
     const currentURL = window.location.href;
@@ -41,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ctx = document.getElementById("radarChart").getContext("2d");
     const data = {
         labels: [
-            ['TRION', `${characterData.Trion || 1}`],
+            ['TRION', `${characterData.Trion}`],
             ['ATTACK', `${characterData.Attack}`.padStart(7, ' ')],
             ['DEFENSE', 'SUPPORT', `${characterData.DefenceSupport}`.padStart(8, ' ')],
             ['MOBILITY', `${characterData.Mobility}`.padStart(8, ' ')],
@@ -223,8 +222,8 @@ function convertDateToString(month, day) {
         "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
         "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"
     ];
-    let monthNum = Number(month);
-    let dayNum = Number(day);
+    const monthNum = Number(month);
+    const dayNum = Number(day);
     const monthName = months[monthNum - 1];
     const ordinalSuffix = getOrdinalSuffix(dayNum);
     return `${monthName} ${day}${ordinalSuffix}`;
