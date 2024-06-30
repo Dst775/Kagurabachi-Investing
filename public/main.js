@@ -1,4 +1,8 @@
 let userID, userName;
+/**
+ * @type {boolean}
+ */
+let loggedIn = false;
 
 document.addEventListener('DOMContentLoaded', () => {
     const headerElement = document.getElementById('header');
@@ -190,12 +194,21 @@ async function getJWT() {
         if (loggedInArea) {
             loggedInArea.classList.remove("blockedArea");
         }
+        loggedIn = true;
     } else {
         loggedOutDropdown();
         if (loggedInArea) {
             loggedInArea.classList.add("blockedArea");
         }
+        loggedIn = false;
     }
+}
+
+/**
+ * @returns {boolean}
+ */
+export function isLoggedIn() {
+    return loggedIn;
 }
 
 function loggedOutDropdown() {
@@ -319,7 +332,7 @@ async function logout() {
  * @param {string} alertClass Color for toast, alert-info, alert-success, etc 
  * @param {number} timeSeconds Time to display in Seconds 
  */
-function makeToast(msg, alertClass, timeSeconds) {
+export function makeToast(msg, alertClass, timeSeconds) {
     const toastContainer = document.getElementById("globalToastContainer");
     const div = document.createElement("div");
     div.classList.add("alert", alertClass);

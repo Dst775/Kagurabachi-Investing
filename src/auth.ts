@@ -39,7 +39,8 @@ router.post("/register", reqHasBody, async (req, res) => {
     const hashedPassword = bcrypt.hashSync(inputs.password, salt);
     await User.insertMany({
         name: inputs.name,
-        password: hashedPassword
+        password: hashedPassword,
+        balance: 10_000
     });
     return res.status(200).json({ msg: "Success" });
 });
@@ -75,7 +76,10 @@ router.post("/login", reqHasBody, async (req, res) => {
     }
     // Password Check
     if (bcrypt.compareSync(inputs.password, user.password as string)) {
-        const payload: JwtPayload = { userID: user._id.toString(), name: user.name as string };
+        const payload: JwtPayload = {
+            userID: user._id.toString(),
+            name: user.name as string
+        };
         const token = jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: "7d" });
         res.cookie('token', token, {
             httpOnly: true,
@@ -133,6 +137,13 @@ export function decodeJWT(token: string): JwtPayload | null {
     }
 }
 
+/**
+ * Middlware to make sure a JWT passed in is Valid
+ * @param req 
+ * @param res 
+ * @param next 
+ * @returns 
+ */
 export function jwtCheck(req: Request, res: Response, next: NextFunction) {
     const token: string | undefined = req.cookies.token;
     if (!token) {
@@ -146,6 +157,12 @@ export function jwtCheck(req: Request, res: Response, next: NextFunction) {
     next();
 }
 
+/**
+ * Check whether all arguments are defined in a given object (inputs)
+ * @param inputs The object to search over
+ * @param argList Required Arguments
+ * @returns 
+ */
 export function isAnyArgUndefined(inputs: object, argList: string[]) {
     for (const arg of argList) {
         if (inputs[arg] === undefined) {

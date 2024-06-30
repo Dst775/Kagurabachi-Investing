@@ -82,6 +82,10 @@ iframe {
     position: relative;
 }
 
+#loggedInArea:not(.blockedArea)>#loggedInContainer {
+    display: none;
+}
+
 #loggedInContainer {
     display: flex;
     align-items: center;

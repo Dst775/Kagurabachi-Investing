@@ -1,3 +1,5 @@
+import * as Globals from "../main.js";
+
 const chapterCount = 35;
 const datasets = [
     {
@@ -85,6 +87,7 @@ const datasets = [
         tension: 0.1
     }
 ];
+window.datasets = datasets;
 
 const labels = [
     "207",
@@ -172,6 +175,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize Sliders
     const sliderMin = document.getElementById("minRange");
     sliderMin.oninput = updateChart;
+
+    // Stock Stuff
+    loadStocks();
 });
 
 function updateChart() {
@@ -213,4 +219,90 @@ function handleLeave() {
         data.borderColor = data.borderColor.replace("0.0", "1.0");
     });
     chart.update();
+}
+
+/* Stock Stuff */
+
+function loadStocks() {
+    const stockContainer = document.getElementById("stockContainer");
+    const stockNames = [
+        { name: "Utagawa Squad", stock: "UTG" },
+        { name: "Oji Squad", stock: "OJI" },
+        { name: "Kakizaki Squad", stock: "KKZ" },
+        { name: "Kitazoe Squad", stock: "KTZ" },
+        { name: "Kuruma Squad", stock: "KRM" },
+        { name: "Kodera Squad", stock: "KDR" },
+        { name: "Suwa Squad", stock: "SWA" },
+        { name: "Ninomiya Squad", stock: "NMY" },
+        { name: "Mizukami Squad", stock: "MZK" },
+        { name: "Murakami Squad", stock: "MRK" },
+        { name: "Wakamura Squad", stock: "WKM" },
+        { name: "Brian", stock: "BRI" },
+    ];
+    stockNames.forEach((stock, i) => {
+        stockContainer.appendChild(createStockElement(stock, i))
+    });
+
+    const interval = setInterval(() => {
+        if(!Globals.isLoggedIn()) {
+            return;
+        }
+        clearInterval(interval);
+
+    }, 2000);
+}
+
+/**
+ * 
+ * @param {object} stock 
+ * @param {string} stock.name
+ * @param {string} stock.stock
+ * @param {number} stockNumber
+ */
+function createStockElement(stock, stockNumber) {
+    const stockOption = document.createElement("stock-option");
+
+    const p = document.createElement("p");
+    p.id = "stockName";
+    p.innerText = stock.name;
+    const span = document.createElement("span");
+    span.innerText = ` (${stock.stock})`;
+    p.appendChild(span);
+
+    const buyButton = document.createElement("button");
+    buyButton.classList.add("btn", "btn-success");
+    buyButton.innerText = "Buy";
+    buyButton.addEventListener("click", () => { buyStock(stockNumber) });
+
+    const sellButton = document.createElement("button");
+    sellButton.classList.add("btn", "btn-error");
+    sellButton.innerText = "Sell";
+    sellButton.addEventListener("click", () => { sellStock(stockNumber) });
+
+    const buttonContainer = document.createElement("div");
+    buttonContainer.appendChild(buyButton);
+    buttonContainer.appendChild(sellButton);
+
+    const stockCount = document.createElement("p");
+    stockCount.id = "stockCount";
+    stockCount.innerText = `Stock: 0`;
+
+    const stockValue = document.createElement("p");
+    stockValue.id = "stockValue";
+    stockValue.innerText = `Value: $153`;
+
+
+    stockOption.appendChild(p);
+    stockOption.appendChild(stockCount);
+    stockOption.appendChild(stockValue);
+    stockOption.appendChild(buttonContainer);
+    return stockOption;
+}
+
+function buyStock(stockNumber) {
+    console.log("buy", stockNumber);
+}
+
+function sellStock(stockNumber) {
+    console.log("sell", stockNumber)
 }

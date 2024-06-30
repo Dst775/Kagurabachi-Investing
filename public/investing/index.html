@@ -10,31 +10,34 @@
     <link rel='stylesheet' type='text/css' media='screen' href='../index.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='./styles.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='./query.css'>
-    <script src='../main.js'></script>
+    <script src='../main.js' type="module"></script>
 </head>
 
 <body>
     <header id="header">
     </header>
 
+    <!-- <main class="text-center items-start flex flex-row"> -->
     <main class="text-center items-center flex flex-col">
-        <div id="barWrapper">
-            <canvas id="barGraph"></canvas>
-        </div>
-
-        <section id="rangeInputs">
-            <div class="rangeRow">
-                <span class="rangeValues" id="minRangeDisplay">207</span>
-                <div class="sliderContainer">
-                    <input value="0" min="0" max="34" step="1" type="range" id="minRange" class="slider" />
-                </div>
+        <div>
+            <div id="barWrapper">
+                <canvas id="barGraph"></canvas>
             </div>
-        </section>
-        <div id="loggedInArea" class="blockedArea">
+            <section id="rangeInputs">
+                <div class="rangeRow">
+                    <span class="rangeValues" id="minRangeDisplay">207</span>
+                    <div class="sliderContainer">
+                        <input value="0" min="0" max="34" step="1" type="range" id="minRange" class="slider" />
+                    </div>
+                </div>
+            </section>
+        </div>
+        <!-- <div id="loggedInArea" class="blockedArea"> -->
+        <div id="loggedInArea">
             <div id="loggedInContainer">
                 <h1 id="notLoggedInText">Must be Logged In</h1>
             </div>
-            <h1 style="width: 50vw;">Sus</h1>
+            <div id="stockContainer"></div>
         </div>
     </main>
 
@@ -44,7 +47,7 @@
         </aside>
     </footer>
 
-    <script>
+    <script type="module">
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById("investingNav").classList.add("navSelected");
         });
