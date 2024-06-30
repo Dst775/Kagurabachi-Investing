@@ -3,6 +3,7 @@ import 'dotenv/config';
 import { router as AuthRoute, connectToDB } from './auth';
 import { router as AdminRoute } from './admin';
 import { router as StockRoute } from './stocks';
+import { StockMarket } from './schemas/stockMarket';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,6 +17,10 @@ app.use("/stocks", StockRoute);
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Test Route');
+});
+
+app.get("/stockData", async (req, res) => {
+    return res.json(await StockMarket.find({}));
 });
 
 app.listen(PORT, async () => {

@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
-    name: String,
-    password: String, // Hashed
-    balance: Number
+    name: { type: String, required: true },
+    password: { type: String, required: true }, // Hashed
+    balance: { type: Number, required: true }
 });
 
 export const User = mongoose.model('User', userSchema);

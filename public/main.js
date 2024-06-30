@@ -3,6 +3,7 @@ let userID, userName;
  * @type {boolean}
  */
 let loggedIn = false;
+export const loginListeners = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     const headerElement = document.getElementById('header');
@@ -195,6 +196,10 @@ async function getJWT() {
             loggedInArea.classList.remove("blockedArea");
         }
         loggedIn = true;
+        console.log("Logged In", loginListeners);
+        loginListeners.forEach(f => {
+            f();
+        });
     } else {
         loggedOutDropdown();
         if (loggedInArea) {

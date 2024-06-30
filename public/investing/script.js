@@ -1,94 +1,7 @@
 import * as Globals from "../main.js";
 
 const chapterCount = 35;
-const datasets = [
-    {
-        label: 'Utagawa Squad 1',
-        data: getRandomData(chapterCount),
-        fill: false,
-        borderColor: 'rgba(180,140,228, 1.0)',
-        tension: 0.1
-    },
-    {
-        label: 'Oji Squad 2',
-        data: getRandomData(chapterCount),
-        fill: false,
-        borderColor: 'rgba(75, 192, 192, 1.0)',
-        tension: 0.1
-    },
-    {
-        label: 'Kakizaki Squad 3',
-        data: getRandomData(chapterCount),
-        fill: false,
-        borderColor: 'rgba(255, 99, 132, 1.0)',
-        tension: 0.1
-    },
-    {
-        label: 'Kitazoe Squad 4',
-        data: getRandomData(chapterCount),
-        fill: false,
-        borderColor: 'rgba(54, 162, 235, 1.0)',
-        tension: 0.1
-    },
-    {
-        label: 'Kuruma Squad 5',
-        data: getRandomData(chapterCount),
-        fill: false,
-        borderColor: 'rgba(255, 206, 86, 1.0)',
-        tension: 0.1
-    },
-    {
-        label: 'Kodera Squad 6',
-        data: getRandomData(chapterCount),
-        fill: false,
-        borderColor: 'rgba(153, 102, 255, 1.0)',
-        tension: 0.1
-    },
-    {
-        label: 'Suwa Squad 7',
-        data: getRandomData(chapterCount),
-        fill: false,
-        borderColor: 'rgba(255, 159, 64, 1.0)',
-        tension: 0.1
-    },
-    {
-        label: 'Ninomiya Squad 8',
-        data: getRandomData(chapterCount),
-        fill: false,
-        borderColor: 'rgba(75, 192, 192, 1.0)',
-        tension: 0.1
-    },
-    {
-        label: 'Mizukami Squad 9',
-        data: getRandomData(chapterCount),
-        fill: false,
-        borderColor: 'rgba(255, 99, 71, 1.0)',
-        tension: 0.1
-    },
-    {
-        label: 'Murakami Squad 10',
-        data: getRandomData(chapterCount),
-        fill: false,
-        borderColor: 'rgba(75, 0, 130, 1.0)',
-        tension: 0.1
-    },
-    {
-        label: 'Wakamura Squad 11',
-        data: getRandomData(chapterCount),
-        fill: false,
-        borderColor: 'rgba(60, 179, 113, 1.0)',
-        tension: 0.1
-    },
-    {
-        label: 'Brian',
-        data: getRandomData(chapterCount),
-        fill: false,
-        borderColor: 'rgba(255, 255, 255, 1.0)',
-        tension: 0.1
-    }
-];
-window.datasets = datasets;
-
+const datasets = [];
 const labels = [
     "207",
     "208",
@@ -126,9 +39,13 @@ const labels = [
     "240",
     "241"
 ];
+let stockData;
 let chart;
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    Globals.loginListeners.push(loadStocks);
+    await loadDataSet();
+
     const canvas = document.getElementById("barGraph");
     const ctx = canvas.getContext("2d");
     canvas.height = window.innerHeight * 0.8;
@@ -175,10 +92,47 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize Sliders
     const sliderMin = document.getElementById("minRange");
     sliderMin.oninput = updateChart;
-
-    // Stock Stuff
-    loadStocks();
 });
+
+/**
+ * Load all of the values for Stocks.
+ * Can be done without signing in.
+ * Calls loadStocks() afterwards but may not happen if not signed in!
+ */
+async function loadDataSet() {
+    const response = await fetch("/stockData");
+    const json = await response.json();
+    stockData = json;
+    const borderColors = [
+        "rgba(180,140,228, 1.0)",
+        "rgba(75, 192, 192, 1.0)",
+        "rgba(255, 99, 132, 1.0)",
+        "rgba(54, 162, 235, 1.0)",
+        "rgba(255, 206, 86, 1.0)",
+        "rgba(153, 102, 255, 1.0)",
+        "rgba(255, 159, 64, 1.0)",
+        "rgba(75, 192, 192, 1.0)",
+        "rgba(255, 99, 71, 1.0)",
+        "rgba(75, 0, 130, 1.0)",
+        "rgba(60, 179, 113, 1.0)",
+        "rgba(255, 255, 255, 1.0)"
+    ];
+
+    for (let i = 0; i < json.length; i++) {
+        const stock = json[i];
+        const obj = {
+            label: stock.stockName,
+            data: stock.stockValues,
+            fill: false,
+            borderColor: borderColors[i],
+            tensions: 0.1
+        };
+        obj.data.push(stock.stockValue);
+
+        datasets.push(obj);
+    }
+    loadStocks();
+}
 
 function updateChart() {
     const sliderMin = document.getElementById("minRange");
@@ -223,40 +177,29 @@ function handleLeave() {
 
 /* Stock Stuff */
 
+/**
+ * Generates the table of stocks to buy/sell
+ * Should be done after Logging In
+ * @returns Nothing
+ */
 function loadStocks() {
+    if (!Globals.isLoggedIn() || stockData == undefined) {
+        return;
+    }
     const stockContainer = document.getElementById("stockContainer");
-    const stockNames = [
-        { name: "Utagawa Squad", stock: "UTG" },
-        { name: "Oji Squad", stock: "OJI" },
-        { name: "Kakizaki Squad", stock: "KKZ" },
-        { name: "Kitazoe Squad", stock: "KTZ" },
-        { name: "Kuruma Squad", stock: "KRM" },
-        { name: "Kodera Squad", stock: "KDR" },
-        { name: "Suwa Squad", stock: "SWA" },
-        { name: "Ninomiya Squad", stock: "NMY" },
-        { name: "Mizukami Squad", stock: "MZK" },
-        { name: "Murakami Squad", stock: "MRK" },
-        { name: "Wakamura Squad", stock: "WKM" },
-        { name: "Brian", stock: "BRI" },
-    ];
-    stockNames.forEach((stock, i) => {
+    stockData.forEach((stock, i) => {
         stockContainer.appendChild(createStockElement(stock, i))
     });
-
-    const interval = setInterval(() => {
-        if(!Globals.isLoggedIn()) {
-            return;
-        }
-        clearInterval(interval);
-
-    }, 2000);
 }
 
 /**
  * 
  * @param {object} stock 
- * @param {string} stock.name
- * @param {string} stock.stock
+ * @param {string} stock.stockLabel
+ * @param {number} stock.stockID
+ * @param {string} stock.stockName
+ * @param {number} stock.stockValue
+ * @param {number[]} stock.stockValues
  * @param {number} stockNumber
  */
 function createStockElement(stock, stockNumber) {
@@ -264,9 +207,9 @@ function createStockElement(stock, stockNumber) {
 
     const p = document.createElement("p");
     p.id = "stockName";
-    p.innerText = stock.name;
+    p.innerText = stock.stockName;
     const span = document.createElement("span");
-    span.innerText = ` (${stock.stock})`;
+    span.innerText = ` (${stock.stockLabel})`;
     p.appendChild(span);
 
     const buyButton = document.createElement("button");
@@ -289,7 +232,7 @@ function createStockElement(stock, stockNumber) {
 
     const stockValue = document.createElement("p");
     stockValue.id = "stockValue";
-    stockValue.innerText = `Value: $153`;
+    stockValue.innerText = `Value: $${stockData[stockNumber].stockValue}`;
 
 
     stockOption.appendChild(p);

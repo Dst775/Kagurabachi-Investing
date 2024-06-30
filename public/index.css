@@ -80,6 +80,8 @@ iframe {
 /* For Blocked off Areas */
 #loggedInArea {
     position: relative;
+    min-width: 25vw;
+    min-height: 25vh;
 }
 
 #loggedInArea:not(.blockedArea)>#loggedInContainer {

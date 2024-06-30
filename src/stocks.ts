@@ -35,14 +35,28 @@ router.post("/buyStock", reqHasBody, async (req, res) => {
     if (stockID < 0 || stockID > 11) {
         return res.status(401).json({ msg: "Invalid Field" });
     }
+    // Get Stock
     const stockData = await StockMarket.findOne({ stockID: stockID });
-    const stockVal = stockData?.stockValue;
-    // Safe to do now
+    if (stockData == null) {
+        return res.status(403).json({ msg: "Stock Not Found?" });
+    }
+    const stockVal = stockData.stockValue;
+    // Ensure User has enough Funds
+    const userTemp = await User.findOne({ name: token?.name });
+    if (userTemp == null) {
+        return res.status(403).json({ msg: "Something went wrong!" });
+    }
+    if (userTemp.balance < stockVal) {
+        return res.status(401).json({ msg: "Not enough Funds" });
+    }
+    userTemp.balance -= stockVal;
+    userTemp.save();
+    // Safe to buy now
     await Stock.insertMany({
         userID: token?.userID,
         stockID: stockID,
         stockValue: stockVal
     });
 
-    return res.json({ msg: "Done" });
+    return res.json({ msg: `Success. Balance: ${userTemp.balance}` });
 });
