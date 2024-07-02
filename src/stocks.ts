@@ -21,6 +21,12 @@ router.get("/getAll", async (req, res) => {
     return res.json(await Stock.find({ userID: token?.userID }));
 });
 
+router.get("/getBalance", async (req, res) => {
+    const token = req.user;
+
+    return res.json({ msg: "Success", balance: (await User.findById(token?.userID))?.balance });
+});
+
 router.post("/buyStock", reqHasBody, async (req, res) => {
     if (isAnyArgUndefined(req.body, ["stockID"])) {
         return res.status(401).json({ msg: "Missing Field" });
@@ -58,5 +64,5 @@ router.post("/buyStock", reqHasBody, async (req, res) => {
         stockValue: stockVal
     });
 
-    return res.json({ msg: `Success. Balance: ${userTemp.balance}` });
+    return res.json({ msg: `Success.`, balance: userTemp.balance });
 });

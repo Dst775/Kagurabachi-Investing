@@ -1,4 +1,6 @@
 import * as Globals from "../main.js";
+Globals.loginListeners.push(loadIndividualData);
+Globals.loginListeners.push(loadBalance);
 
 const chapterCount = 35;
 const datasets = [];
@@ -41,9 +43,10 @@ const labels = [
 ];
 let stockData;
 let chart;
+let stockCounts = [];
+let personalStocks;
 
 document.addEventListener('DOMContentLoaded', async () => {
-    Globals.loginListeners.push(loadStocks);
     await loadDataSet();
 
     const canvas = document.getElementById("barGraph");
@@ -130,8 +133,9 @@ async function loadDataSet() {
         obj.data.push(stock.stockValue);
 
         datasets.push(obj);
+        stockCounts.push(0);
     }
-    loadStocks();
+    loadIndividualData();
 }
 
 function updateChart() {
@@ -175,6 +179,23 @@ function handleLeave() {
     chart.update();
 }
 
+async function loadIndividualData() {
+    if (!Globals.isLoggedIn() || stockData == undefined) {
+        return;
+    }
+    for(let i = 0; i < stockCounts.length; i++) {
+        // In case logging out and logging into someone else
+        stockCounts[i] = 0;
+    }
+    const res = await fetch("/stocks/getAll");
+    const stockArr = await res.json();
+    personalStocks = stockArr;
+    stockArr.forEach((stock) => {
+        stockCounts[stock.stockID]++;
+    });
+    loadStocks();
+}
+
 /* Stock Stuff */
 
 /**
@@ -187,9 +208,35 @@ function loadStocks() {
         return;
     }
     const stockContainer = document.getElementById("stockContainer");
+    // Delete all old UI in case of re-login
+    while(stockContainer.firstChild) {
+        stockContainer.removeChild(stockContainer.firstChild);
+    }
+    // Create UI
     stockData.forEach((stock, i) => {
         stockContainer.appendChild(createStockElement(stock, i))
     });
+}
+
+async function loadBalance() {
+    if (!Globals.isLoggedIn()) {
+        return;
+    }
+    const res = await fetch("/stocks/getBalance");
+    if(res.status != 200) {
+        console.log(res.msg);
+        return Globals.makeToast("Error loading Balance.", "info-error", 3);
+    }
+    const json = await res.json();
+    setBalance(json.balance);
+}
+
+/**
+ * @param {number} balance 
+ */
+function setBalance(balance) {
+    const balanceText = document.getElementById("balanceText");
+    balanceText.innerText = balance.toLocaleString();
 }
 
 /**
@@ -204,6 +251,7 @@ function loadStocks() {
  */
 function createStockElement(stock, stockNumber) {
     const stockOption = document.createElement("stock-option");
+    stockOption.id = `stock${stockNumber}`;
 
     const p = document.createElement("p");
     p.id = "stockName";
@@ -228,7 +276,7 @@ function createStockElement(stock, stockNumber) {
 
     const stockCount = document.createElement("p");
     stockCount.id = "stockCount";
-    stockCount.innerText = `Stock: 0`;
+    stockCount.innerText = `Stock: ${stockCounts[stockNumber]}`;
 
     const stockValue = document.createElement("p");
     stockValue.id = "stockValue";
@@ -242,10 +290,29 @@ function createStockElement(stock, stockNumber) {
     return stockOption;
 }
 
-function buyStock(stockNumber) {
-    console.log("buy", stockNumber);
+async function buyStock(stockNumber) {
+    const data = {
+        stockID: stockNumber
+    };
+    const res = await fetch("/stocks/buyStock", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+    const json = await res.json();
+    console.log("Bought Stock", json);
+    if (res.status == 200) {
+        Globals.makeToast(`${json.msg}`, "alert-success", 2);
+        setBalance(json.balance);
+        const stockCount = document.querySelector(`#stock${stockNumber}`).querySelector("#stockCount");
+        stockCount.innerText = `Stock: ${(Number(stockCount.innerText.replaceAll(",","").match(/\d+/)[0]) + 1).toLocaleString()}`;
+    } else {
+        Globals.makeToast(`${json.msg}`, "alert-error", 2);
+    }
 }
 
-function sellStock(stockNumber) {
-    console.log("sell", stockNumber)
+async function sellStock(stockNumber) {
+    Globals.makeToast(`Sold ${stockNumber}`, "alert-success", 2);
 }

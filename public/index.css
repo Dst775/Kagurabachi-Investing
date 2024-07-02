@@ -64,6 +64,10 @@ iframe {
     pointer-events: none;
 }
 
+#globalToastContainer > * {
+    z-index: inherit;
+}
+
 #globalToastContainer>div {
     opacity: 1;
     transform: translateY(100px);

@@ -3,6 +3,10 @@ let userID, userName;
  * @type {boolean}
  */
 let loggedIn = false;
+/**
+ * Push functions to be called after logging in is detected!
+ * @type {Function[]}
+ */
 export const loginListeners = [];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -197,8 +201,8 @@ async function getJWT() {
         }
         loggedIn = true;
         console.log("Logged In", loginListeners);
-        loginListeners.forEach(f => {
-            f();
+        loginListeners.forEach(async f => {
+            await f();
         });
     } else {
         loggedOutDropdown();
