@@ -2,45 +2,14 @@ import * as Globals from "../main.js";
 Globals.loginListeners.push(loadIndividualData);
 Globals.loginListeners.push(loadBalance);
 
-const chapterCount = 35;
+const latestChapter = 243;
+const chapterCount = latestChapter - 207 + 1;
 const datasets = [];
-const labels = [
-    "207",
-    "208",
-    "209",
-    "210",
-    "211",
-    "212",
-    "213",
-    "214",
-    "215",
-    "216",
-    "217",
-    "218",
-    "219",
-    "220",
-    "221",
-    "222",
-    "223",
-    "224",
-    "225",
-    "226",
-    "227",
-    "228",
-    "229",
-    "230",
-    "231",
-    "232",
-    "233",
-    "234",
-    "235",
-    "236",
-    "237",
-    "238",
-    "239",
-    "240",
-    "241"
-];
+const labels = [];
+for(let i = 207; i <= latestChapter; i++) {
+    labels.push(i.toString());
+}
+
 let stockData;
 let chart;
 let stockCounts = [];
@@ -95,7 +64,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialize Sliders
     const sliderMin = document.getElementById("minRange");
     sliderMin.oninput = updateChart;
+    const startingSlider = 237;
+    sliderMin.value = startingSlider;
+    sliderMin.max = latestChapter;
+    document.getElementById("minRangeDisplay").innerText = startingSlider;
+    updateChart();
+
+    const buySellCount = document.getElementById("buyCount");
+    buySellCount.oninput = () => { updateSliderDisplay(buySellCount, "buySellDisplay") };
 });
+
+/**
+ * 
+ * @param {HTMLInputElement} original 
+ * @param {String} id 
+ */
+function updateSliderDisplay(original, id) {
+    document.getElementById(id).innerText = original.value;
+}
 
 /**
  * Load all of the values for Stocks.
@@ -140,15 +126,14 @@ async function loadDataSet() {
 
 function updateChart() {
     const sliderMin = document.getElementById("minRange");
-    const minValue = parseInt(sliderMin.value);
+    const minValue = parseInt(sliderMin.value) - 207;
     let trimmedLabels = labels.slice(minValue);
     for (let i = 0; i < datasets.length; i++) {
         datasets[i].data = getRandomData(chapterCount - minValue);
     }
     chart.data.labels = trimmedLabels;
     chart.update();
-
-    document.getElementById("minRangeDisplay").innerText = 207 + minValue;
+    updateSliderDisplay(sliderMin, "minRangeDisplay");
 }
 
 function getRandomData(numPoints) {
@@ -183,7 +168,7 @@ async function loadIndividualData() {
     if (!Globals.isLoggedIn() || stockData == undefined) {
         return;
     }
-    for(let i = 0; i < stockCounts.length; i++) {
+    for (let i = 0; i < stockCounts.length; i++) {
         // In case logging out and logging into someone else
         stockCounts[i] = 0;
     }
@@ -191,7 +176,7 @@ async function loadIndividualData() {
     const stockArr = await res.json();
     personalStocks = stockArr;
     stockArr.forEach((stock) => {
-        stockCounts[stock.stockID]++;
+        stockCounts[stock.sID]++;
     });
     loadStocks();
 }
@@ -209,7 +194,7 @@ function loadStocks() {
     }
     const stockContainer = document.getElementById("stockContainer");
     // Delete all old UI in case of re-login
-    while(stockContainer.firstChild) {
+    while (stockContainer.firstChild) {
         stockContainer.removeChild(stockContainer.firstChild);
     }
     // Create UI
@@ -223,7 +208,7 @@ async function loadBalance() {
         return;
     }
     const res = await fetch("/stocks/getBalance");
-    if(res.status != 200) {
+    if (res.status != 200) {
         console.log(res.msg);
         return Globals.makeToast("Error loading Balance.", "info-error", 3);
     }
@@ -291,8 +276,10 @@ function createStockElement(stock, stockNumber) {
 }
 
 async function buyStock(stockNumber) {
+    const buyCount = parseInt(document.getElementById("buyCount").value, 10);
     const data = {
-        stockID: stockNumber
+        stockID: stockNumber,
+        buyCount: buyCount
     };
     const res = await fetch("/stocks/buyStock", {
         method: "POST",
@@ -304,15 +291,39 @@ async function buyStock(stockNumber) {
     const json = await res.json();
     console.log("Bought Stock", json);
     if (res.status == 200) {
+        stockCounts[stockNumber] += buyCount;
+        console.log(stockCounts);
         Globals.makeToast(`${json.msg}`, "alert-success", 2);
         setBalance(json.balance);
         const stockCount = document.querySelector(`#stock${stockNumber}`).querySelector("#stockCount");
-        stockCount.innerText = `Stock: ${(Number(stockCount.innerText.replaceAll(",","").match(/\d+/)[0]) + 1).toLocaleString()}`;
+        stockCount.innerText = `Stock: ${stockCounts[stockNumber].toLocaleString()}`;
     } else {
         Globals.makeToast(`${json.msg}`, "alert-error", 2);
     }
 }
 
 async function sellStock(stockNumber) {
-    Globals.makeToast(`Sold ${stockNumber}`, "alert-success", 2);
+    const sellCount = parseInt(document.getElementById("buyCount").value, 10);
+    const data = {
+        stockID: stockNumber,
+        sellCount: sellCount
+    };
+    const res = await fetch("/stocks/sellStock", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+    const json = await res.json();
+    console.log("Sold Stock", json);
+    if (res.status == 200) {
+        stockCounts[stockNumber] -= sellCount;
+        Globals.makeToast(`${json.msg}`, "alert-success", 2);
+        setBalance(json.balance);
+        const stockCount = document.querySelector(`#stock${stockNumber}`).querySelector("#stockCount");
+        stockCount.innerText = `Stock: ${stockCounts[stockNumber].toLocaleString()}`;
+    } else {
+        Globals.makeToast(`${json.msg}`, "alert-error", 2);
+    }
 }

@@ -40,7 +40,7 @@ router.post("/register", reqHasBody, async (req, res) => {
     await User.insertMany({
         name: inputs.name,
         password: hashedPassword,
-        balance: 10_000
+        balance: 500
     });
     return res.status(200).json({ msg: "Success" });
 });

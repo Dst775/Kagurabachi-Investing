@@ -27,17 +27,26 @@
                 <div class="rangeRow">
                     <span class="rangeValues" id="minRangeDisplay">207</span>
                     <div class="sliderContainer">
-                        <input value="0" min="0" max="34" step="1" type="range" id="minRange" class="slider" />
+                        <input value="207" min="207" max="242" step="1" type="range" id="minRange" class="slider" />
                     </div>
                 </div>
             </section>
         </div>
         <div id="loggedInArea" class="blockedArea">
-        <!-- <div id="loggedInArea"> -->
+            <!-- <div id="loggedInArea"> -->
             <div id="loggedInContainer">
                 <h1 id="notLoggedInText">Must be Logged In</h1>
             </div>
             <p class="text-4xl">Balance: $<span id="balanceText">0</span></p>
+            <div class="join">
+                <label class="join-item">Buy/Sell Count: </label>
+                <div class="rangeRow m-auto join-item">
+                    <span class="rangeValues ml-2" id="buySellDisplay">1</span>
+                    <div class="sliderContainer">
+                        <input value="1" min="1" max="50" step="1" type="range" id="buyCount" class="slider" />
+                    </div>
+                </div>
+            </div>
             <div id="stockContainer"></div>
         </div>
     </main>
