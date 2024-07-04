@@ -1,9 +1,8 @@
 import express, { Request, Response, NextFunction } from 'express';
-import { User } from './schemas/user';
 import cookieParser from 'cookie-parser';
-import { decodeJWT, jwtCheck, isAnyArgUndefined, reqHasBody } from './auth';
+import { jwtCheck, isAnyArgUndefined, reqHasBody } from './auth';
 import { StockMarket } from './schemas/stockMarket';
-import { Stock } from './schemas/stock';
+import { User } from './schemas/user';
 
 export const router = express.Router();
 export let canBuyStocks: boolean = true;
@@ -28,6 +27,11 @@ router.get("/turnOffStocks", (req, res) => {
 router.get("/turnOnStocks", (req, res) => {
     canBuyStocks = true;
 });
+
+// router.get("/addStocks", async (req, res) => {
+//     await User.updateMany({}, { stocks: new Array(12).fill(0) });
+//     return res.json({ msg: "Success" });
+// });
 
 // router.get("/wipeStocks", async (req, res) => {
 //     await Stock.deleteMany({});

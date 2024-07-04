@@ -1,17 +1,10 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express from 'express';
 import cookieParser from 'cookie-parser';
-import mongoose from 'mongoose';
-import { decodeJWT, jwtCheck, reqHasBody, isAnyArgUndefined, JwtPayload } from "./auth";
-import { Stock } from './schemas/stock';
+import { jwtCheck, reqHasBody, isAnyArgUndefined, JwtPayload } from "./auth";
 import { User } from './schemas/user';
 import { StockMarket } from './schemas/stockMarket';
 
 export const router = express.Router();
-
-interface ShortenedStock {
-    sID: number;
-    sVal: number;
-};
 
 router.use(cookieParser());
 router.use(jwtCheck);
@@ -22,13 +15,8 @@ router.get("/", (req, res) => {
 
 router.get("/getAll", async (req, res) => {
     const token: JwtPayload = req.user as JwtPayload;
-    const stocks = await Stock.find({ userID: token.userID });
-    const out: ShortenedStock[] = [];
-    stocks.forEach(stock => {
-        out.push({ sID: stock.stockID, sVal: stock.stockValue });
-    });
-
-    return res.json(out);
+    const outputStocks = (await User.findById(token.userID))?.stocks || [];
+    return res.json(outputStocks);
 });
 
 router.get("/getBalance", async (req, res) => {
@@ -66,16 +54,10 @@ router.post("/buyStock", reqHasBody, async (req, res) => {
     if (userTemp.balance < stockVal * buyCount) {
         return res.status(401).json({ msg: "Not enough Funds" });
     }
-    userTemp.balance -= stockVal * buyCount;
-    userTemp.save();
     // Safe to buy now
-    for (let i = 0; i < buyCount; i++) {
-        await Stock.insertMany({
-            userID: token.userID,
-            stockID: stockID,
-            stockValue: stockVal
-        });
-    }
+    userTemp.balance -= stockVal * buyCount;
+    userTemp.stocks[stockID] += buyCount;
+    userTemp.save();
 
     return res.json({ msg: `Success.`, balance: userTemp.balance });
 });
@@ -107,31 +89,13 @@ router.post("/sellStock", reqHasBody, async (req, res) => {
         return res.status(403).json({ msg: "Something went wrong!" });
     }
     // Stocks owned for this ID only
-    const stocksOwned = await Stock.find({ userID: token.userID, stockID: stockID });
-    if (stocksOwned.length < sellCount) {
+    if (userTemp.stocks[stockID] < sellCount) {
         return res.status(403).json({ msg: "You don't own enough stocks to sell this many!" });
     }
-
     // Delete Stocks
-    for(let i = 0; i < sellCount; i++) {
-        await stocksOwned[i].deleteOne();
-    }
-
+    userTemp.stocks[stockID] -= sellCount;
     userTemp.balance += stockVal * sellCount;
     userTemp.save();
 
     return res.json({ msg: `Success.`, balance: userTemp?.balance });
 });
-
-async function getAllStocksCount(userID: string): Promise<number[]> {
-    const stocks = await Stock.find({ userID: userID });
-    const counts: number[] = [];
-    stocks.forEach(stock => {
-        if (counts[stock.stockID] === undefined) {
-            counts[stock.stockID] = 0;
-        }
-        counts[stock.stockID]++;
-    });
-
-    return counts;
-}

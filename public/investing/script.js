@@ -6,7 +6,7 @@ const latestChapter = 243;
 const chapterCount = latestChapter - 207 + 1;
 const datasets = [];
 const labels = [];
-for(let i = 207; i <= latestChapter; i++) {
+for (let i = 207; i <= latestChapter; i++) {
     labels.push(i.toString());
 }
 
@@ -174,10 +174,12 @@ async function loadIndividualData() {
     }
     const res = await fetch("/stocks/getAll");
     const stockArr = await res.json();
+    console.log(stockArr);
     personalStocks = stockArr;
-    stockArr.forEach((stock) => {
-        stockCounts[stock.sID]++;
+    stockArr.forEach((stockCount, i) => {
+        stockCounts[i] = stockCount;
     });
+
     loadStocks();
 }
 
