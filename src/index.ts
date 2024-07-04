@@ -9,8 +9,8 @@ import { StockMarket } from './schemas/stockMarket';
 const app = express();
 const PORT = process.env.PORT || 3000;
 const limiter = rateLimit({
-    windowMs: 60 * 1000, // 1 minutes
-    limit: 75,
+    windowMs: 1 * 1000, // 1 second
+    limit: 40,
     standardHeaders: 'draft-7',
     legacyHeaders: false,
     message: { msg: "Rate Limited." }
