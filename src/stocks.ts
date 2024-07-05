@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import { jwtCheck, reqHasBody, isAnyArgUndefined, JwtPayload } from "./auth";
 import { User } from './schemas/user';
 import { StockMarket } from './schemas/stockMarket';
+import { canBuyStocks } from './admin';
 
 export const router = express.Router();
 
@@ -26,6 +27,9 @@ router.get("/getBalance", async (req, res) => {
 });
 
 router.post("/buyStock", reqHasBody, async (req, res) => {
+    if (!canBuyStocks()) {
+        return res.status(400).json({ msg: "Buy/Sell is disabled currently." });
+    }
     if (isAnyArgUndefined(req.body, ["stockID", "buyCount"])) {
         return res.status(401).json({ msg: "Missing Field" });
     }
@@ -63,6 +67,9 @@ router.post("/buyStock", reqHasBody, async (req, res) => {
 });
 
 router.post("/sellStock", reqHasBody, async (req, res) => {
+    if (!canBuyStocks()) {
+        return res.status(400).json({ msg: "Buy/Sell is disabled currently." });
+    }
     if (isAnyArgUndefined(req.body, ["stockID", "sellCount"])) {
         return res.status(401).json({ msg: "Missing Field" });
     }

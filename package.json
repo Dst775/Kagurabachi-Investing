@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsx ./src/index.ts -p tsconfig.back.json",
     "buildFront": "npx tsc -p tsconfig.front.json",
-    "styles": "npx tailwind -i ./public/tailwind.css -o ./public/styles.css --watch"
+    "styles": "npx tailwind -i ./public/tailwind.css -o ./public/styles.css --watch",
+    "stylesAdmin": "npx tailwind -i ./admin/tailwind.css -o ./admin/daisy.css --watch"
   },
   "author": "",
   "license": "ISC",

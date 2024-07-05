@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { rateLimit } from 'express-rate-limit'
 import 'dotenv/config';
 import { router as AuthRoute, connectToDB } from './auth';
-import { router as AdminRoute } from './admin';
+import { router as AdminRoute, loadAdmin } from './admin';
 import { router as StockRoute } from './stocks';
 import { StockMarket } from './schemas/stockMarket';
 
@@ -34,5 +34,6 @@ app.get("/stockData", async (req, res) => {
 
 app.listen(PORT, async () => {
     await connectToDB();
+    await loadAdmin();
     console.log(`Server is running http://localhost:${PORT}`);
 });

@@ -1,6 +1,14 @@
-import mongoose from 'mongoose';
+import mongoose, { Document, Model, Schema } from 'mongoose';
 
-const stockMarketSchema = new mongoose.Schema({
+export interface IStockMarket extends Document {
+    stockID: number;
+    stockValue: number;
+    stockValues: number[];
+    stockName: string;
+    stockLabel: string;
+}
+
+const stockMarketSchema = new mongoose.Schema<IStockMarket>({
     stockID: { type: Number, required: true },
     stockValue: { type: Number, required: true },
     stockValues: { type: [Number], required: true },
@@ -8,4 +16,4 @@ const stockMarketSchema = new mongoose.Schema({
     stockLabel: { type: String, required: true }
 });
 
-export const StockMarket = mongoose.model('StockMarket', stockMarketSchema);
+export const StockMarket = mongoose.model<IStockMarket>('StockMarket', stockMarketSchema);
