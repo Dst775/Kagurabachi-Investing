@@ -5,6 +5,7 @@ Globals.loginListeners.push(loadBalance);
 const latestChapter = 243;
 const chapterCount = latestChapter - 207 + 1;
 const datasets = [];
+const ORIGINAL_DATASETS = [];
 const labels = [];
 for (let i = 207; i <= latestChapter; i++) {
     labels.push(i.toString());
@@ -93,18 +94,18 @@ async function loadDataSet() {
     const json = await response.json();
     stockData = json;
     const borderColors = [
-        "rgba(180,140,228, 1.0)",
-        "rgba(75, 192, 192, 1.0)",
-        "rgba(255, 99, 132, 1.0)",
-        "rgba(54, 162, 235, 1.0)",
-        "rgba(255, 206, 86, 1.0)",
-        "rgba(153, 102, 255, 1.0)",
-        "rgba(255, 159, 64, 1.0)",
-        "rgba(75, 192, 192, 1.0)",
-        "rgba(255, 99, 71, 1.0)",
-        "rgba(75, 0, 130, 1.0)",
-        "rgba(60, 179, 113, 1.0)",
-        "rgba(255, 255, 255, 1.0)"
+        "rgba(180,140,228, 1.0)", // Utagawa
+        "rgba(175, 248, 251, 1.0)", // Oji
+        "rgba(255, 151, 50, 1.0)", // Kakizaki
+        "rgba(54, 162, 255, 1.0)", // Kitazoe
+        "rgba(255, 206, 86, 1.0)", // Kuruma
+        "rgba(153, 102, 255, 1.0)", // Kodera
+        "rgba(141, 224, 151, 1.0)", // Suwa
+        "rgba(20, 192, 220, 1.0)", // Ninomiya
+        "rgba(255, 50, 71, 1.0)", // Mizukami
+        "rgba(10, 255, 149, 1.0)", // Murakami
+        "rgba(238, 49, 215, 1.0)", // Wakamura
+        "rgba(255, 255, 255, 1.0)" // Brian
     ];
 
     for (let i = 0; i < json.length; i++) {
@@ -119,6 +120,7 @@ async function loadDataSet() {
         obj.data.push(stock.stockValue);
 
         datasets.push(obj);
+        ORIGINAL_DATASETS.push(obj.data.slice(0)); // Clone Data
         stockCounts.push(0);
     }
     loadIndividualData();
@@ -129,7 +131,7 @@ function updateChart() {
     const minValue = parseInt(sliderMin.value) - 207;
     let trimmedLabels = labels.slice(minValue);
     for (let i = 0; i < datasets.length; i++) {
-        datasets[i].data = getRandomData(chapterCount - minValue);
+        datasets[i].data = ORIGINAL_DATASETS[i].slice(minValue);
     }
     chart.data.labels = trimmedLabels;
     chart.update();
@@ -291,10 +293,8 @@ async function buyStock(stockNumber) {
         body: JSON.stringify(data)
     });
     const json = await res.json();
-    console.log("Bought Stock", json);
     if (res.status == 200) {
         stockCounts[stockNumber] += buyCount;
-        console.log(stockCounts);
         Globals.makeToast(`${json.msg}`, "alert-success", 2);
         setBalance(json.balance);
         const stockCount = document.querySelector(`#stock${stockNumber}`).querySelector("#stockCount");
@@ -318,7 +318,6 @@ async function sellStock(stockNumber) {
         body: JSON.stringify(data)
     });
     const json = await res.json();
-    console.log("Sold Stock", json);
     if (res.status == 200) {
         stockCounts[stockNumber] -= sellCount;
         Globals.makeToast(`${json.msg}`, "alert-success", 2);

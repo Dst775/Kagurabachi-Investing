@@ -2,8 +2,30 @@ let canBuyStocks = false;
 
 document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById("stockBox").addEventListener("click", () => { toggleStocks(true); });
+    document.getElementById("stockSubmitButton").addEventListener("click", () => { updateStocks(); });
+
     await loadAdminData();
 });
+
+async function updateStocks() {
+    const data = [];
+    for (let i = 0; i < 12; i++) {
+        data.push(parseInt(document.getElementById(`stock${i}Input`).value || "0"));
+    }
+    
+    const response = await fetch('/admin/updateStocks', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            stockValues: data
+        })
+    });
+
+    const json = await response.json();
+    makeToast(json.msg, "alert-warning", 3);
+}
 
 async function loadAdminData() {
     const res = await fetch("/admin/adminPanel");

@@ -33,6 +33,26 @@ router.get("/turnOnStocks", async (req, res) => {
     return res.json({ msg: "Success!" });
 });
 
+router.post("/updateStocks", reqHasBody, async (req, res) => {
+    if (isAnyArgUndefined(req.body, ["stockValues"])) {
+        return res.status(401).json({ msg: "Missing Field" });
+    }
+    const stockValues: number[] = req.body.stockValues;
+    if (stockValues.length != (await numberOfStocks())) {
+        return res.status(403).json({ msg: "Incorrect number of stocks!" });
+    }
+    // Put old values into array, load in new values
+    const stocks = await StockMarket.find({}).sort({ stockID: 1 });
+    for (let i = 0; i < stocks.length; i++) {
+        const currentStock = stocks[i];
+        currentStock.stockValues.push(currentStock.stockValue);
+        currentStock.stockValue += stockValues[i]; // Relative Update
+        currentStock.save();
+    }
+
+    return res.json({ msg: "Success" });
+});
+
 // router.get("/addStocks", async (req, res) => {
 //     await User.updateMany({}, { stocks: new Array(12).fill(0) });
 //     return res.json({ msg: "Success" });
@@ -76,4 +96,9 @@ export async function loadAdmin() {
         throw new Error("Can't load Admin");
     }
     adminInfo = admin;
+}
+
+async function numberOfStocks(): Promise<number> {
+    const stocks = await StockMarket.countDocuments({});
+    return stocks;
 }
