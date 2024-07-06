@@ -32,6 +32,11 @@ app.get("/stockData", async (req, res) => {
     return res.json(await StockMarket.find({}).sort({ stockID: 1 }));
 });
 
+app.get("/numChaps", async (req, res) => {
+    const stock = await StockMarket.findOne({});
+    return res.json({ count: stock?.stockValues.length || 0});
+});
+
 app.listen(PORT, async () => {
     await connectToDB();
     await loadAdmin();

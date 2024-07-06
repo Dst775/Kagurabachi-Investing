@@ -2,21 +2,22 @@ import * as Globals from "../main.js";
 Globals.loginListeners.push(loadIndividualData);
 Globals.loginListeners.push(loadBalance);
 
-const latestChapter = 243;
-const chapterCount = latestChapter - 207 + 1;
 const datasets = [];
 const ORIGINAL_DATASETS = [];
 const labels = [];
-for (let i = 207; i <= latestChapter; i++) {
-    labels.push(i.toString());
-}
 
 let stockData;
 let chart;
 let stockCounts = [];
-let personalStocks;
 
 document.addEventListener('DOMContentLoaded', async () => {
+    const latestChapter = 207 + (await (await fetch("/numChaps")).json()).count;
+    const chapterCount = latestChapter - 207 + 1;
+    for (let i = 207; i <= latestChapter; i++) {
+        labels.push(i.toString());
+    }
+
+
     await loadDataSet();
 
     const canvas = document.getElementById("barGraph");
@@ -65,9 +66,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialize Sliders
     const sliderMin = document.getElementById("minRange");
     sliderMin.oninput = updateChart;
-    const startingSlider = 237;
+    const startingSlider = latestChapter - 6;
     sliderMin.value = startingSlider;
-    sliderMin.max = latestChapter;
+    sliderMin.max = latestChapter - 1;
     document.getElementById("minRangeDisplay").innerText = startingSlider;
     updateChart();
 
@@ -177,7 +178,6 @@ async function loadIndividualData() {
     const res = await fetch("/stocks/getAll");
     const stockArr = await res.json();
     console.log(stockArr);
-    personalStocks = stockArr;
     stockArr.forEach((stockCount, i) => {
         stockCounts[i] = stockCount;
     });
