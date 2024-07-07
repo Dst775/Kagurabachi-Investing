@@ -3,7 +3,7 @@ main {
     flex-direction: row;
 }
 
-main > div:first-child {
+main>div:first-child {
     /* width: 45vw; */
     width: 90vw;
 }
@@ -128,21 +128,21 @@ stock-option {
     width: 20%;
 }
 
-stock-option > #stockName {
+stock-option>#stockName {
     font-size: large;
 }
 
-stock-option > #stockName > span {
+stock-option>#stockName>span {
     font-weight: bold;
 }
 
 stock-option div {
     display: flex;
     justify-content: space-around;
-    
+
 }
 
-stock-option  button {
+stock-option button {
     width: 40%;
-    border: 10px solid black;
+    border: 2px solid black !important;
 }

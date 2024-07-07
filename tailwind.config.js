@@ -1,4 +1,6 @@
-import daisyui from 'daisyui'
+import daisyui from 'daisyui';
+import themes from 'daisyui/src/theming/themes';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./public/**/*.{html,js,ts}", "./admin/**/*.{html,js,ts}"],
@@ -9,6 +11,14 @@ export default {
     daisyui
   ],
   daisyui: {
-    themes: ["dark"]
+    themes: [
+      {
+        light: {
+          ...themes["dark"],
+          success: "#2CA3D4",
+          secondary: "#EF34B1"
+        },
+      }
+    ]
   }
 }

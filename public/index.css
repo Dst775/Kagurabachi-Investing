@@ -2,7 +2,7 @@
     --primary: #00bd8b;
     --primaryShade: #057b5c;
     --navSelected: #4bb79a;
-    --pink: #f11ea8;
+    --pink: #F11EA8;
 }
 
 @font-face {
@@ -17,9 +17,28 @@
 
 #navHeader {
     font-family: Barbie;
-    color: black;
     letter-spacing: 3px;
-    text-shadow: 0.05em 0.06em 0px var(--pink);
+    text-wrap: nowrap;
+}
+
+#navHeader, #topNav a {
+    color: #FEFEFE;
+    text-shadow:
+        0.05em 0.05em 0 var(--pink),
+        0.065em 0.06em 0 var(--pink),
+        0.08em 0.07em 0 var(--pink),
+        0.095em 0.08em 0 var(--pink),
+        0.11em 0.09em 0 var(--pink),
+        0.125em 0.10em 0 var(--pink),
+        0.14em 0.11em 0 var(--pink),
+        0.155em 0.12em 0 var(--pink),
+        0.17em 0.13em 0 var(--pink),
+        0.185em 0.14em 0 var(--pink),
+        0.20em 0.15em 0 var(--pink);
+}
+
+#hamburgerPath {
+    filter: drop-shadow(0.2em 0.2em 0px var(--pink));
 }
 
 .menu>li {
@@ -38,6 +57,7 @@ body {
 /* Navbar */
 #hamburgerIcon:hover {
     transform: rotate(-10deg);
+    background-color: oklch(var(--su));
 }
 
 .navbar a:hover {
@@ -50,7 +70,7 @@ body {
     transform: rotate(-10deg);
 }
 
-#topNav a:hover::before, #navbarPfpContainer:hover::before, .navSelected::before, #navHeader:hover::before, #hamburgerIcon:hover::before {
+#topNav a::before, #navbarPfpContainer::before, .navSelected::before, #navHeader:hover::before, #hamburgerIcon::before {
     content: '';
     position: absolute;
     bottom: 20%;
@@ -62,23 +82,18 @@ body {
     background-position: center;
     background-size: 100% 90%;
     background-repeat: no-repeat;
-    transform: rotate(15deg);
     opacity: 0;
-    transition: opacity 0.3s;
+}
+
+#topNav a:hover::before, #navbarPfpContainer:hover:hover::before, .navSelected::before, #hamburgerIcon:hover:hover::before {
+    opacity: 1.0;
+    mix-blend-mode: screen;
 }
 
 #navHeader:hover::before {
-    transform: rotate(5deg);
-}
-
-#topNav a:hover:hover::before, #navbarPfpContainer:hover:hover::before, .navSelected::before, #hamburgerIcon:hover:hover::before {
     opacity: 1.0;
-    mix-blend-mode: overlay;
-}
-
-#navHeader:hover:hover::before {
-    opacity: 0.7;
-    mix-blend-mode: overlay;
+    mix-blend-mode: screen;
+    /* transform: rotate(5deg); */
 }
 
 .navLinks {
@@ -86,17 +101,76 @@ body {
 }
 
 header .drawer-side {
-    z-index: 2;
+    z-index: 3;
 }
 
 /* Other */
 
+@keyframes move-background {
+    0% {
+        background-position: 0% 0%;
+    }
+
+    100% {
+        background-position: -100% 0%;
+    }
+}
+
+main::before {
+    content: '';
+    background-image: radial-gradient(circle, transparent 75%, oklch(var(--b1))),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0) 80%, oklch(var(--b1))),
+        url("./images/Favicon.ico");
+    background-size: 5%;
+    opacity: 0.09;
+    position: absolute;
+    left: 50%;
+    top: 0px;
+    translate: -50% 0%;
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+    animation: move-background 180s linear infinite;
+    will-change: background-position;
+}
+
+main::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    background: radial-gradient(circle, transparent 70%, oklch(var(--b1)) 100%);
+}
+
 main {
-    z-index: 0;
+    z-index: 2;
     min-height: 83.5vh;
     width: 100%;
     padding: 0.5%;
+    position: relative;
 }
+
+footer {
+    clip-path: polygon(0% 10%, 2.5% 0%, 5% 10%,
+            7.5% 0%, 10% 10%, 12.5% 0%,
+            15% 10%, 17.5% 0%, 20% 10%,
+            22.5% 0%, 25% 10%, 27.5% 0%,
+            30% 10%, 32.5% 0%, 35% 10%,
+            37.5% 0%, 40% 10%, 42.5% 0%,
+            45% 10%, 47.5% 0%, 50% 10%,
+            52.5% 0%, 55% 10%, 57.5% 0%,
+            60% 10%, 62.5% 0%, 65% 10%,
+            67.5% 0%, 70% 10%, 72.5% 0%,
+            75% 10%, 77.5% 0%, 80% 10%,
+            82.5% 0%, 85% 10%, 87.5% 0%,
+            90% 10%, 92.5% 0%, 95% 10%,
+            97.5% 0%, 100% 10%,
+            100% 100%, 0% 100%);
+}
+
 
 .iframe-container {
     width: 100%;
@@ -113,6 +187,7 @@ iframe {
 
 #navbarPfp {
     width: 80%;
+    filter: drop-shadow(0.05em 0.05em 0px var(--pink)) drop-shadow(0.05em 0.05em 0px var(--pink)) drop-shadow(0.03em 0.03em 0px var(--pink));
 }
 
 #navbarPfp:hover {
@@ -121,6 +196,7 @@ iframe {
 
 #navbarPfpContainer:hover {
     transform: rotate(-20deg);
+    background-color: oklch(var(--su));
 }
 
 #navbarPfpContainer {

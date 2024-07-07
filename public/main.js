@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 class="inline-block w-5 h-5 stroke-current">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                                    d="M4 6h16M4 12h16M4 18h16"></path>
+                                    d="M4 6h16M4 12h16M4 18h16" stroke="white" id="hamburgerPath"></path>
                             </svg>
                         </label>
                     </div>
@@ -42,14 +42,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
             <div class="flex-1">
-                <a class="btn btn-ghost text-4xl" href="/" id="navHeader">Broader Briefing File</a>
+                <a class="btn btn-ghost md:text-4xl text-base" href="/" id="navHeader">Broader Briefing File</a>
             </div>
             <div class="flex-none navLinks hidden lg:flex">
                 <ul class="menu menu-horizontal px-1" id="topNav">
-                    <li><a href="/canon" id="canonNav" class="text-lg">Canon</a></li>
-                    <li><a href="/investing" id="investingNav" class="text-lg">Investing</a></li>
-                    <li><a href="/ocmaker" id="ocMakerNav" class="text-lg">OC Maker v1</a></li>
-                    <li><a href="/ocmaker2" id="ocMaker2Nav" class="text-lg">OC Maker v2</a></li>
+                    <li><a href="/canon" id="canonNav" class="text-xl">Canon</a></li>
+                    <li><a href="/investing" id="investingNav" class="text-xl">Investing</a></li>
+                    <li><a href="/ocmaker" id="ocMakerNav" class="text-xl">OC Maker v1</a></li>
+                    <li><a href="/ocmaker2" id="ocMaker2Nav" class="text-xl">OC Maker v2</a></li>
                 </ul>
             </div>
             <div class="dropdown dropdown-end">

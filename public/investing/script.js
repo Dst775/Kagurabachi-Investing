@@ -311,7 +311,7 @@ function createStockElement(stock, stockNumber) {
     p.appendChild(span);
 
     const buyButton = document.createElement("button");
-    buyButton.classList.add("btn", "btn-success");
+    buyButton.classList.add("btn", "btn-info");
     buyButton.innerText = "Buy";
     buyButton.addEventListener("click", () => { buyStock(stockNumber) });
 
