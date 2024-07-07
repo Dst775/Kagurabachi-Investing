@@ -2,6 +2,28 @@
     --primary: #00bd8b;
     --primaryShade: #057b5c;
     --navSelected: #4bb79a;
+    --pink: #f11ea8;
+}
+
+@font-face {
+    font-family: Barbie;
+    src: url("./fonts/Bartex.ttf");
+}
+
+@font-face {
+    font-family: Mario;
+    src: url("./fonts/MARIOMAKER.otf");
+}
+
+#navHeader {
+    font-family: Barbie;
+    color: black;
+    letter-spacing: 3px;
+    text-shadow: 0.05em 0.06em 0px var(--pink);
+}
+
+.menu>li {
+    font-family: Mario;
 }
 
 * {
@@ -13,12 +35,50 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-.navbar a:hover, .navbar label:hover {
-    background-color: var(--primaryShade);
+/* Navbar */
+#hamburgerIcon:hover {
+    transform: rotate(-10deg);
 }
 
-.navSelected {
-    background-color: var(--navSelected);
+.navbar a:hover {
+    background-color: oklch(var(--su));
+    transform: rotate(-1deg);
+}
+
+#topNav a:hover {
+    background-color: oklch(var(--su));
+    transform: rotate(-10deg);
+}
+
+#topNav a:hover::before, #navbarPfpContainer:hover::before, .navSelected::before, #navHeader:hover::before, #hamburgerIcon:hover::before {
+    content: '';
+    position: absolute;
+    bottom: 20%;
+    left: 0%;
+    right: 0;
+    width: 100%;
+    height: 75%;
+    background-image: url("./images/HoverEffect.png");
+    background-position: center;
+    background-size: 100% 90%;
+    background-repeat: no-repeat;
+    transform: rotate(15deg);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+#navHeader:hover::before {
+    transform: rotate(5deg);
+}
+
+#topNav a:hover:hover::before, #navbarPfpContainer:hover:hover::before, .navSelected::before, #hamburgerIcon:hover:hover::before {
+    opacity: 1.0;
+    mix-blend-mode: overlay;
+}
+
+#navHeader:hover:hover::before {
+    opacity: 0.7;
+    mix-blend-mode: overlay;
 }
 
 .navLinks {
@@ -28,6 +88,8 @@ body {
 header .drawer-side {
     z-index: 2;
 }
+
+/* Other */
 
 main {
     z-index: 0;
@@ -54,8 +116,15 @@ iframe {
 }
 
 #navbarPfp:hover {
-    background-color: var(--primaryShade);
     border-radius: 25%;
+}
+
+#navbarPfpContainer:hover {
+    transform: rotate(-20deg);
+}
+
+#navbarPfpContainer {
+    transition: transform 0.3s;
 }
 
 .toastParent {
@@ -67,7 +136,7 @@ iframe {
     box-shadow: -0.2em 0.2em 0.1em rgba(0, 0, 0, 0.5);
 }
 
-#globalToastContainer > * {
+#globalToastContainer>* {
     z-index: inherit;
 }
 

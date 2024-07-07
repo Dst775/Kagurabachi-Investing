@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <input id="menu-drawer" type="checkbox" class="drawer-toggle" />
                     <div class="drawer-content">
                         <!--Menu/Hamburger Icon-->
-                        <label for="menu-drawer" class="btn btn-square btn-ghost drawer-button">
+                        <label for="menu-drawer" class="btn btn-square btn-ghost drawer-button" id="hamburgerIcon">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 class="inline-block w-5 h-5 stroke-current">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
@@ -42,19 +42,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
             <div class="flex-1">
-                <a class="btn btn-ghost text-xl" href="/">Broader Briefing File</a>
+                <a class="btn btn-ghost text-4xl" href="/" id="navHeader">Broader Briefing File</a>
             </div>
             <div class="flex-none navLinks hidden lg:flex">
-                <ul class="menu menu-horizontal px-1">
-                    <li><a href="/canon" id="canonNav">Canon</a></li>
-                    <li><a href="/investing" id="investingNav">Investing</a></li>
-                    <li><a href="/ocmaker" id="ocMakerNav">OC Maker v1</a></li>
-                    <li><a href="/ocmaker2" id="ocMaker2Nav">OC Maker v2</a></li>
+                <ul class="menu menu-horizontal px-1" id="topNav">
+                    <li><a href="/canon" id="canonNav" class="text-lg">Canon</a></li>
+                    <li><a href="/investing" id="investingNav" class="text-lg">Investing</a></li>
+                    <li><a href="/ocmaker" id="ocMakerNav" class="text-lg">OC Maker v1</a></li>
+                    <li><a href="/ocmaker2" id="ocMaker2Nav" class="text-lg">OC Maker v2</a></li>
                 </ul>
             </div>
             <div class="dropdown dropdown-end">
                 <div tabindex="0" role="button">
-                    <div class="flex-none w-10 rounded-full">
+                    <div class="flex-none w-10 rounded-full" id="navbarPfpContainer">
                         <img alt="Tailwind CSS Navbar component" src="/images/NavbarProfilePicture.png"
                             id="navbarPfp" />
                     </div>
