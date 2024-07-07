@@ -2,7 +2,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import { jwtCheck, reqHasBody, isAnyArgUndefined, JwtPayload } from "./auth";
 import { User } from './schemas/user';
-import { StockMarket } from './schemas/stockMarket';
+import { IStockMarket, StockMarket } from './schemas/stockMarket';
 import { canBuyStocks } from './admin';
 
 export const router = express.Router();
@@ -49,18 +49,27 @@ router.post("/buyStock", reqHasBody, async (req, res) => {
     if (stockData == null) {
         return res.status(403).json({ msg: "Stock Not Found?" });
     }
-    const stockVal = stockData.stockValue;
-    // Ensure User has enough Funds
+    // Get User
     const userTemp = await User.findOne({ name: token.name });
     if (userTemp == null) {
         return res.status(403).json({ msg: "Something went wrong!" });
     }
-    if (userTemp.balance < stockVal * buyCount) {
+    // Perform Safe Buying
+    let costOfPurchase = 0;
+    for (let i = 0; i < buyCount; i++) {
+        const stockVal = getStockAdjustedValue(stockData.stockValue, stockData.ownCount + i);
+        costOfPurchase += stockVal;
+    }
+    // Ensure User has enough Funds
+    if (userTemp.balance < costOfPurchase) {
         return res.status(401).json({ msg: "Not enough Funds" });
     }
     // Safe to buy now
-    userTemp.balance -= stockVal * buyCount;
+    stockData.ownCount += buyCount;
+    userTemp.balance -= costOfPurchase;
     userTemp.stocks[stockID] += buyCount;
+    // Save Changes
+    stockData.save();
     userTemp.save();
 
     return res.json({ msg: `Success.`, balance: userTemp.balance });
@@ -89,8 +98,7 @@ router.post("/sellStock", reqHasBody, async (req, res) => {
     if (stockData == null) {
         return res.status(403).json({ msg: "Stock Not Found?" });
     }
-    const stockVal = stockData.stockValue;
-    // Ensure User has enough Stocks
+    // Get User
     const userTemp = await User.findOne({ name: token.name });
     if (userTemp == null) {
         return res.status(403).json({ msg: "Something went wrong!" });
@@ -99,10 +107,32 @@ router.post("/sellStock", reqHasBody, async (req, res) => {
     if (userTemp.stocks[stockID] < sellCount) {
         return res.status(403).json({ msg: "You don't own enough stocks to sell this many!" });
     }
-    // Delete Stocks
-    userTemp.stocks[stockID] -= sellCount;
-    userTemp.balance += stockVal * sellCount;
+    // Perform Safe Selling
+    for (let i = 0; i < sellCount; i++) {
+        const stockVal = getStockAdjustedValue(stockData.stockValue, stockData.ownCount - 1);
+        // Safe to buy now
+        stockData.ownCount--;
+        userTemp.balance += stockVal;
+        userTemp.stocks[stockID]--;
+    }
+    // Save Changes
+    stockData.save();
     userTemp.save();
 
     return res.json({ msg: `Success.`, balance: userTemp?.balance });
 });
+
+/**
+ * Calculates how much a stock is actually worth based on the own count.
+ * @param baseValue 
+ * @param ownCount 
+ */
+export function getStockAdjustedValue(baseValue: number, ownCount: number): number {
+    const OWN_JUMP = 5; // Number of owns to change value
+    const JUMP_MULTIPLIER = 2; // Number to change by per JUMP
+    return baseValue + JUMP_MULTIPLIER * Math.floor(ownCount / OWN_JUMP);
+}
+
+export async function getStockMarketStocksInOrder(): Promise<IStockMarket[]> {
+    return await StockMarket.find({}).sort({ stockID: 1 });
+}

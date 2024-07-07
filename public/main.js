@@ -65,10 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 </ul>
             </div>
         </div>
-        <div class="toast toast-end">
-            <div id="globalToastContainer">
-            </div>
-        </div>
         <dialog id="loginModal" class="modal">
             <div class="modal-box flex flex-col text-center">
                 <form>
@@ -344,7 +340,7 @@ async function logout() {
 export function makeToast(msg, alertClass, timeSeconds) {
     const toastContainer = document.getElementById("globalToastContainer");
     const div = document.createElement("div");
-    div.classList.add("alert", alertClass);
+    div.classList.add("alert", "alert-outline", alertClass);
     const span = document.createElement("span");
     span.innerText = msg;
 

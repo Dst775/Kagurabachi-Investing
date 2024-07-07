@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
-import mongoose from 'mongoose';
+import mongoose, { ObjectId } from 'mongoose';
 import { User } from './schemas/user';
 import bcrypt from 'bcrypt';
 import cookieParser from 'cookie-parser';
@@ -21,7 +21,11 @@ router.get("/", (req, res) => {
 });
 
 router.post("/register", reqHasBody, async (req, res) => {
-    const inputs = req.body;
+    interface RegisterInput {
+        name: string;
+        password: string;
+    }
+    const inputs: RegisterInput = req.body;
     if (isAnyArgUndefined(inputs, ["name", "password"])) {
         return res.status(401).json({ msg: "Missing Field" });
     }
@@ -66,7 +70,11 @@ function registerNamePasswordCheck(name: string, password: string) {
 }
 
 router.post("/login", reqHasBody, async (req, res) => {
-    const inputs = req.body;
+    interface LoginInput {
+        name: string;
+        password: string;
+    }
+    const inputs: LoginInput = req.body;
     if (isAnyArgUndefined(inputs, ["name", "password"])) {
         return res.status(401).json({ msg: "Missing Field" });
     }
@@ -78,7 +86,7 @@ router.post("/login", reqHasBody, async (req, res) => {
     // Password Check
     if (bcrypt.compareSync(inputs.password, user.password as string)) {
         const payload: JwtPayload = {
-            userID: user._id.toString(),
+            userID: (user._id as ObjectId).toString(),
             name: user.name as string
         };
         const token = jwt.sign(payload, process.env.JWT_SECRET as string, { expiresIn: "7d" });

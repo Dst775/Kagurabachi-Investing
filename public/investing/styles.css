@@ -1,7 +1,3 @@
-#barGraph {
-    background-color: #303f54;
-}
-
 main {
     display: flex;
     flex-direction: row;
@@ -15,6 +11,8 @@ main > div:first-child {
 #barWrapper {
     width: 100%;
     flex-grow: 1;
+    min-height: 80vh;
+    background-color: #303f54;
 }
 
 #rangeInputs {

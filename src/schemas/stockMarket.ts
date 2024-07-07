@@ -6,6 +6,7 @@ export interface IStockMarket extends Document {
     stockValues: number[];
     stockName: string;
     stockLabel: string;
+    ownCount: number;
 }
 
 const stockMarketSchema = new mongoose.Schema<IStockMarket>({
@@ -13,7 +14,8 @@ const stockMarketSchema = new mongoose.Schema<IStockMarket>({
     stockValue: { type: Number, required: true },
     stockValues: { type: [Number], required: true },
     stockName: { type: String, required: true },
-    stockLabel: { type: String, required: true }
+    stockLabel: { type: String, required: true },
+    ownCount: { type: Number, required: true }
 });
 
 export const StockMarket = mongoose.model<IStockMarket>('StockMarket', stockMarketSchema);

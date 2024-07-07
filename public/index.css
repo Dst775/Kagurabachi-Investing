@@ -58,10 +58,13 @@ iframe {
     border-radius: 25%;
 }
 
-#globalToastContainer {
+.toastParent {
     z-index: 10000;
-    position: relative;
-    pointer-events: none;
+}
+
+.alert-outline {
+    border: 2px solid black;
+    box-shadow: -0.2em 0.2em 0.1em rgba(0, 0, 0, 0.5);
 }
 
 #globalToastContainer > * {

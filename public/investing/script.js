@@ -2,13 +2,30 @@ import * as Globals from "../main.js";
 Globals.loginListeners.push(loadIndividualData);
 Globals.loginListeners.push(loadBalance);
 
+/**
+ * @typedef {Object} StockData Data from /stockData
+ * @property {number} stockID
+ * @property {number} stockValue
+ * @property {number[]} stockValues
+ * @property {string} stockName
+ * @property {string} stockLabel
+ * @property {number} ownCount
+ */
+
+/**@type {object[]} For Chart.js*/
 const datasets = [];
-const ORIGINAL_DATASETS = [];
+/**@type {number[]} Stock Values for Chart.js */
+let originalDatasets = [];
+/**@type {string[]} Labels for Chart.js */
 const labels = [];
 
+/**@type {StockData[]} */
 let stockData;
 let chart;
+/**@type {number[]} Number of stocks owned by User*/
 let stockCounts = [];
+/**@type {number[]} Stock values for Stock Listing UI*/
+let stockValues = [];
 
 document.addEventListener('DOMContentLoaded', async () => {
     const latestChapter = 207 + (await (await fetch("/numChaps")).json()).count;
@@ -17,16 +34,38 @@ document.addEventListener('DOMContentLoaded', async () => {
         labels.push(i.toString());
     }
 
-
+    // Load /stockData
     await loadDataSet();
+    setInterval(async () => {
+        await loadStockValues(false);
+    }, 5_000);
 
-    const canvas = document.getElementById("barGraph");
-    const ctx = canvas.getContext("2d");
-    canvas.height = window.innerHeight * 0.8;
+    // Create Chart
     const data = {
         labels: labels,
         datasets: datasets
     };
+    createChart(data);
+
+    // Chart Slider
+    const sliderMin = document.getElementById("minRange");
+    sliderMin.oninput = updateChart;
+    const startingSlider = latestChapter - 6;
+    sliderMin.value = startingSlider;
+    sliderMin.max = latestChapter - 1;
+    document.getElementById("minRangeDisplay").innerText = startingSlider;
+    updateChart();
+
+    // Buying/Selling Slider
+    const buySellCount = document.getElementById("buyCount");
+    buySellCount.oninput = () => { updateSliderDisplay(buySellCount, "buySellDisplay") };
+});
+
+function createChart(data) {
+    const canvas = document.getElementById("barGraph");
+    const ctx = canvas.getContext("2d");
+    canvas.height = window.innerHeight * 0.8;
+
     const config = {
         type: 'line',
         data: data,
@@ -62,19 +101,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
     chart = new Chart(ctx, config);
-
-    // Initialize Sliders
-    const sliderMin = document.getElementById("minRange");
-    sliderMin.oninput = updateChart;
-    const startingSlider = latestChapter - 6;
-    sliderMin.value = startingSlider;
-    sliderMin.max = latestChapter - 1;
-    document.getElementById("minRangeDisplay").innerText = startingSlider;
-    updateChart();
-
-    const buySellCount = document.getElementById("buyCount");
-    buySellCount.oninput = () => { updateSliderDisplay(buySellCount, "buySellDisplay") };
-});
+}
 
 /**
  * 
@@ -88,7 +115,7 @@ function updateSliderDisplay(original, id) {
 /**
  * Load all of the values for Stocks.
  * Can be done without signing in.
- * Calls loadStocks() afterwards but may not happen if not signed in!
+ * Calls loadIndividualData() afterwards but may not happen if not signed in!
  */
 async function loadDataSet() {
     const response = await fetch("/stockData");
@@ -121,7 +148,7 @@ async function loadDataSet() {
         obj.data.push(stock.stockValue);
 
         datasets.push(obj);
-        ORIGINAL_DATASETS.push(obj.data.slice(0)); // Clone Data
+        originalDatasets.push(obj.data.slice(0)); // Clone Data
         stockCounts.push(0);
     }
     loadIndividualData();
@@ -132,7 +159,7 @@ function updateChart() {
     const minValue = parseInt(sliderMin.value) - 207;
     let trimmedLabels = labels.slice(minValue);
     for (let i = 0; i < datasets.length; i++) {
-        datasets[i].data = ORIGINAL_DATASETS[i].slice(minValue);
+        datasets[i].data = originalDatasets[i].slice(minValue);
     }
     chart.data.labels = trimmedLabels;
     chart.update();
@@ -182,10 +209,29 @@ async function loadIndividualData() {
         stockCounts[i] = stockCount;
     });
 
-    loadStocks();
+    await loadStockValues(true);
 }
 
 /* Stock Stuff */
+
+/**
+ * Get stock data from /stockValues and put them in the UI
+ * @param {boolean} create True if to setup UI, False if to just update
+ */
+async function loadStockValues(create) {
+    if (!Globals.isLoggedIn() || stockData == undefined) {
+        return;
+    }
+
+    const res = await fetch("/stockValues");
+    /**@type {number[]} */
+    stockValues = (await res.json()).values;
+    // Globals.makeToast(JSON.stringify(stockValues), "alert-warning", 2);
+    if (create)
+        loadStocks();
+    else
+        updateStocks();
+}
 
 /**
  * Generates the table of stocks to buy/sell
@@ -205,6 +251,21 @@ function loadStocks() {
     stockData.forEach((stock, i) => {
         stockContainer.appendChild(createStockElement(stock, i))
     });
+}
+
+/**
+ * Updates existing UI for Stock Listings
+ */
+function updateStocks() {
+    const stockContainer = document.getElementById("stockContainer");
+    if (!Globals.isLoggedIn() || stockData == undefined || stockContainer.children.length < stockData.length) {
+        return;
+    }
+    for (let i = 0; i < stockData.length; i++) {
+        const stockOption = stockContainer.querySelector(`#stock${i}`);
+        const stockValue = stockOption.querySelector("#stockValue");
+        stockValue.innerText = `Value: $${stockValues[i]}`
+    }
 }
 
 async function loadBalance() {
@@ -269,7 +330,7 @@ function createStockElement(stock, stockNumber) {
 
     const stockValue = document.createElement("p");
     stockValue.id = "stockValue";
-    stockValue.innerText = `Value: $${stockData[stockNumber].stockValue}`;
+    stockValue.innerText = `Value: $${stockValues[stockNumber]}`;
 
 
     stockOption.appendChild(p);
@@ -299,6 +360,7 @@ async function buyStock(stockNumber) {
         setBalance(json.balance);
         const stockCount = document.querySelector(`#stock${stockNumber}`).querySelector("#stockCount");
         stockCount.innerText = `Stock: ${stockCounts[stockNumber].toLocaleString()}`;
+        loadStockValues();
     } else {
         Globals.makeToast(`${json.msg}`, "alert-error", 2);
     }
@@ -324,6 +386,7 @@ async function sellStock(stockNumber) {
         setBalance(json.balance);
         const stockCount = document.querySelector(`#stock${stockNumber}`).querySelector("#stockCount");
         stockCount.innerText = `Stock: ${stockCounts[stockNumber].toLocaleString()}`;
+        loadStockValues();
     } else {
         Globals.makeToast(`${json.msg}`, "alert-error", 2);
     }

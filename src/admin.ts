@@ -4,6 +4,7 @@ import { jwtCheck, isAnyArgUndefined, reqHasBody } from './auth';
 import { StockMarket } from './schemas/stockMarket';
 import { User } from './schemas/user';
 import { Admin, IAdmin } from './schemas/admin';
+import { getStockMarketStocksInOrder } from './stocks';
 
 export const router = express.Router();
 let adminInfo: IAdmin; // Initialize in index.ts
@@ -42,7 +43,7 @@ router.post("/updateStocks", reqHasBody, async (req, res) => {
         return res.status(403).json({ msg: "Incorrect number of stocks!" });
     }
     // Put old values into array, load in new values
-    const stocks = await StockMarket.find({}).sort({ stockID: 1 });
+    const stocks = await getStockMarketStocksInOrder();
     for (let i = 0; i < stocks.length; i++) {
         const currentStock = stocks[i];
         currentStock.stockValues.push(currentStock.stockValue);
@@ -53,13 +54,9 @@ router.post("/updateStocks", reqHasBody, async (req, res) => {
     return res.json({ msg: "Success" });
 });
 
-// router.get("/addStocks", async (req, res) => {
-//     await User.updateMany({}, { stocks: new Array(12).fill(0) });
-//     return res.json({ msg: "Success" });
-// });
-
-// router.get("/wipeStocks", async (req, res) => {
-//     await Stock.deleteMany({});
+// router.get("/resetStocks", async (req, res) => {
+//     await StockMarket.updateMany({}, { ownCount: 0 });
+//     await User.updateMany({}, { balance: 500, stocks: new Array(12).fill(0) });
 //     return res.json({ msg: "Success" });
 // });
 

@@ -1,6 +1,7 @@
-import mongoose, { Document, Model, Schema } from 'mongoose';
+import mongoose, { Document, Model, Schema, ObjectId } from 'mongoose';
 
 export interface IUser extends Document {
+    _id: ObjectId;
     name: string;
     password: string; // Hashed
     balance: number;

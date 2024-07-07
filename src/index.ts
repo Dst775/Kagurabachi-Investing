@@ -3,7 +3,7 @@ import { rateLimit } from 'express-rate-limit'
 import 'dotenv/config';
 import { router as AuthRoute, connectToDB } from './auth';
 import { router as AdminRoute, loadAdmin } from './admin';
-import { router as StockRoute } from './stocks';
+import { getStockAdjustedValue, getStockMarketStocksInOrder, router as StockRoute } from './stocks';
 import { StockMarket } from './schemas/stockMarket';
 
 const app = express();
@@ -29,12 +29,22 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.get("/stockData", async (req, res) => {
-    return res.json(await StockMarket.find({}).sort({ stockID: 1 }));
+    return res.json(await getStockMarketStocksInOrder());
+});
+
+app.get("/stockValues", async (req, res) => {
+    const stocks = await getStockMarketStocksInOrder();
+    const values: number[] = [];
+    for (let i = 0; i < stocks.length; i++) {
+        const stock = stocks[i];
+        values.push(getStockAdjustedValue(stock.stockValue, stock.ownCount));
+    }
+    return res.json({ values: values });
 });
 
 app.get("/numChaps", async (req, res) => {
     const stock = await StockMarket.findOne({});
-    return res.json({ count: stock?.stockValues.length || 0});
+    return res.json({ count: stock?.stockValues.length || 0 });
 });
 
 app.listen(PORT, async () => {
