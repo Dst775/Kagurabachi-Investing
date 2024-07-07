@@ -60,9 +60,14 @@ body {
     background-color: oklch(var(--su));
 }
 
-.navbar a:hover {
+#navSidebarList a:hover {
     background-color: oklch(var(--su));
-    transform: rotate(-1deg);
+    color: black;
+}
+
+#navHeader:hover {
+    background-color: oklch(var(--su));
+    transform: rotate(-3deg);
 }
 
 #topNav a:hover {
