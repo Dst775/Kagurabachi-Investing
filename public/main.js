@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
             <div class="flex-1">
-                <a class="btn btn-ghost md:text-4xl text-base" href="/" id="navHeader">Broader Briefing File</a>
+                <a class="btn btn-ghost md:text-4xl text-xl" href="/" id="navHeader">Broader Briefing File</a>
             </div>
             <div class="flex-none navLinks hidden lg:flex">
                 <ul class="menu menu-horizontal px-1" id="topNav">

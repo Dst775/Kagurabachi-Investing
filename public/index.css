@@ -7,12 +7,14 @@
 
 @font-face {
     font-family: Barbie;
-    src: url("./fonts/Bartex.ttf");
+    src: Arial, url("./fonts/Bartex.ttf");
+    font-display: swap;
 }
 
 @font-face {
     font-family: Mario;
-    src: url("./fonts/MARIOMAKER.otf");
+    src: Arial, url("./fonts/MARIOMAKER.otf");
+    font-display: swap;
 }
 
 #navHeader {
@@ -52,6 +54,12 @@
 
 body {
     font-family: Arial, Helvetica, sans-serif;
+}
+
+footer {
+    background-image: url("./images/StripedImage.png");
+    background-size: 1%;
+    animation: move-background-horizontal 300s linear infinite;
 }
 
 /* Navbar */
@@ -109,22 +117,36 @@ header .drawer-side {
     z-index: 3;
 }
 
+#profileDropdownList {
+    z-index: 5;
+}
+
 /* Other */
 
-@keyframes move-background {
+@keyframes move-background-vertical {
     0% {
         background-position: 0% 0%;
     }
 
     100% {
-        background-position: -100% 0%;
+        background-position: 0% 100%;
+    }
+}
+
+@keyframes move-background-horizontal {
+    0% {
+        background-position: 0% 0%;
+    }
+
+    100% {
+        background-position: 100% 0%;
     }
 }
 
 main::before {
     content: '';
     background-image: radial-gradient(circle, transparent 75%, oklch(var(--b1))),
-        linear-gradient(to bottom, rgba(0, 0, 0, 0) 80%, oklch(var(--b1))),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0) 95%, oklch(var(--b1))),
         url("./images/Favicon.ico");
     background-size: 5%;
     opacity: 0.09;
@@ -135,7 +157,7 @@ main::before {
     z-index: -1;
     height: 100%;
     width: 100%;
-    animation: move-background 180s linear infinite;
+    animation: move-background-vertical 180s linear infinite;
     will-change: background-position;
 }
 
@@ -144,10 +166,12 @@ main::after {
     position: absolute;
     top: 0;
     left: 0;
+    right: 0;
+    bottom: 0;
     height: 100%;
     width: 100%;
     z-index: -1;
-    background: radial-gradient(circle, transparent 70%, oklch(var(--b1)) 100%);
+    background: linear-gradient(to right, oklch(var(--b1)) 0%, transparent 50%, oklch(var(--b1)) 100%);
 }
 
 main {
@@ -159,20 +183,20 @@ main {
 }
 
 footer {
-    clip-path: polygon(0% 10%, 2.5% 0%, 5% 10%,
-            7.5% 0%, 10% 10%, 12.5% 0%,
-            15% 10%, 17.5% 0%, 20% 10%,
-            22.5% 0%, 25% 10%, 27.5% 0%,
-            30% 10%, 32.5% 0%, 35% 10%,
-            37.5% 0%, 40% 10%, 42.5% 0%,
-            45% 10%, 47.5% 0%, 50% 10%,
-            52.5% 0%, 55% 10%, 57.5% 0%,
-            60% 10%, 62.5% 0%, 65% 10%,
-            67.5% 0%, 70% 10%, 72.5% 0%,
-            75% 10%, 77.5% 0%, 80% 10%,
-            82.5% 0%, 85% 10%, 87.5% 0%,
-            90% 10%, 92.5% 0%, 95% 10%,
-            97.5% 0%, 100% 10%,
+    clip-path: polygon(0% 20%, 2.5% 0%, 5% 20%,
+            7.5% 0%, 10% 20%, 12.5% 0%,
+            15% 20%, 17.5% 0%, 20% 20%,
+            22.5% 0%, 25% 20%, 27.5% 0%,
+            30% 20%, 32.5% 0%, 35% 20%,
+            37.5% 0%, 40% 20%, 42.5% 0%,
+            45% 20%, 47.5% 0%, 50% 20%,
+            52.5% 0%, 55% 20%, 57.5% 0%,
+            60% 20%, 62.5% 0%, 65% 20%,
+            67.5% 0%, 70% 20%, 72.5% 0%,
+            75% 20%, 77.5% 0%, 80% 20%,
+            82.5% 0%, 85% 20%, 87.5% 0%,
+            90% 20%, 92.5% 0%, 95% 20%,
+            97.5% 0%, 100% 20%,
             100% 100%, 0% 100%);
 }
 
@@ -191,7 +215,7 @@ iframe {
 }
 
 #navbarPfp {
-    width: 80%;
+    width: 5vw;
     filter: drop-shadow(0.05em 0.05em 0px var(--pink)) drop-shadow(0.05em 0.05em 0px var(--pink)) drop-shadow(0.03em 0.03em 0px var(--pink));
 }
 
@@ -215,6 +239,11 @@ iframe {
 .alert-outline {
     border: 2px solid black;
     box-shadow: -0.2em 0.2em 0.1em rgba(0, 0, 0, 0.5);
+}
+
+main .btn:hover {
+    box-shadow: -0.0 0.0 1em rgba(0, 0, 0, 1);
+    scale: 105%;
 }
 
 #globalToastContainer>* {
