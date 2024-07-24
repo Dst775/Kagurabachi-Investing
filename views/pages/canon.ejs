@@ -6,13 +6,16 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Canon</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='../styles.css'>
-    <link rel='stylesheet' type='text/css' media='screen' href='../index.css'>
-    <link rel='stylesheet' type='text/css' media='screen' href='../query.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='./styles.css'>
-    <script src='../main.js' type="module"></script>
-    <script src='../compiledTS/character.js' type="module"></script>
-    <script src='../compiledTS/rankings.js' type="module"></script>
+    <link rel='stylesheet' type='text/css' media='screen' href='./index.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./query.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./canon/styles.css'>
+    <script>
+        let loggedIn = <%= auth.loggedIn %>
+    </script>
+    <script src='./main.js' type="module"></script>
+    <script src='./compiledTS/character.js' type="module"></script>
+    <script src='./compiledTS/rankings.js' type="module"></script>
 </head>
 
 <body>
@@ -20,12 +23,14 @@
         <div id="globalToastContainer">
         </div>
     </div>
-    <header id="header"></header>
+    <header id="header">
+        <%- include("../partials/header"); %>
+    </header>
 
     <main class="text-center items-center flex flex-col">
         <label class="input input-bordered flex items-center gap-2">
             <input type="text" class="grow" placeholder="Search" id="searchInput" />
-            <img src="../images/search.png" />
+            <img src="./images/search.png" />
         </label>
         <br />
         <div class="characterContainer" id="cardContainer">
@@ -37,18 +42,14 @@
         </div>
     </main>
 
-    <footer class="footer footer-center p-4 bg-neutral text-base-content">
-        <aside>
-            <p>Copyright © 2024 - Some rights reserved by Emperor Bob</p>
-        </aside>
-    </footer>
+    <%- include("../partials/footer") %>
 
     <script type="module">
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById("canonNav").classList.add("navSelected");
         });
     </script>
-    <script src='./script.js' type="module"></script>
+    <script src='./canon/script.js' type="module"></script>
 </body>
 
 </html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>OC Maker</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./styles.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./query.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./index.css'>
+    <script>
+        let loggedIn = <%= auth.loggedIn %>
+    </script>
+    <script src='./main.js' type="module"></script>
+</head>
+
+<body>
+    <div class="toast toast-end toastParent">
+        <div id="globalToastContainer">
+        </div>
+    </div>
+    <header id="header">
+        <%- include("../partials/header") %>
+    </header>
+
+    <main>
+        <div class="iframe-container">
+            <iframe src="https://emperorbob7.github.io/ocmaker/"></iframe>
+        </div>
+    </main>
+
+    <script type="module">
+            document.addEventListener('DOMContentLoaded', () => {
+                document.getElementById("ocMakerNav").classList.add("navSelected");
+            });
+    </script>
+</body>
+
+</html>

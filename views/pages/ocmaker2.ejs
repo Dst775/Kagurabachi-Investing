@@ -6,10 +6,13 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>OC Maker v2</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='../styles.css'>
-    <link rel='stylesheet' type='text/css' media='screen' href='../query.css'>
-    <link rel='stylesheet' type='text/css' media='screen' href='../index.css'>
-    <script src='../main.js' type="module"></script>
+    <link rel='stylesheet' type='text/css' media='screen' href='./styles.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./query.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./index.css'>
+    <script>
+        let loggedIn = <%= auth.loggedIn %>
+    </script>
+    <script src='./main.js' type="module"></script>
 </head>
 
 <body>
@@ -17,7 +20,9 @@
         <div id="globalToastContainer">
         </div>
     </div>
-    <header id="header"></header>
+    <header id="header">
+        <%- include("../partials/header") %>
+    </header>
 
     <main>
         <div class="iframe-container">

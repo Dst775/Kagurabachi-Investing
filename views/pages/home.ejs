@@ -9,6 +9,9 @@
     <link rel='stylesheet' type='text/css' media='screen' href='./styles.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='./query.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='./index.css'>
+    <script>
+        let loggedIn = <%= auth.loggedIn %>
+    </script>
     <script src='main.js' type="module"></script>
 </head>
 
@@ -17,7 +20,9 @@
         <div id="globalToastContainer">
         </div>
     </div>
-    <header id="header"></header>
+    <header id="header">
+        <%- include("../partials/header"); %>
+    </header>
 
     <main class="flex flex-1">
         <div class="hero">
@@ -33,11 +38,7 @@
         </div>
     </main>
 
-    <footer class="footer footer-center p-4 bg-neutral text-base-content">
-        <aside>
-            <p>Copyright © 2024 - Some rights reserved by Emperor Bob</p>
-        </aside>
-    </footer>
+    <%- include("../partials/footer") %>
 </body>
 
 </html>

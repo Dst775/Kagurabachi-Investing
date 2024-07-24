@@ -6,12 +6,15 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Investing</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='../styles.css'>
-    <link rel='stylesheet' type='text/css' media='screen' href='../index.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='./styles.css'>
-    <link rel='stylesheet' type='text/css' media='screen' href='../query.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='./query.css'>
-    <script src='../main.js' type="module"></script>
+    <link rel='stylesheet' type='text/css' media='screen' href='./index.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./investing/styles.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./investing/query.css'>
+    <script>
+        let loggedIn = <%= auth.loggedIn %>
+    </script>
+    <script src='./main.js' type="module"></script>
 </head>
 
 <body>
@@ -20,6 +23,7 @@
         </div>
     </div>
     <header id="header">
+        <%- include("../partials/header") %>
     </header>
 
     <!-- <main class="text-center items-start flex flex-row"> -->
@@ -56,11 +60,7 @@
         </div>
     </main>
 
-    <footer class="footer footer-center p-4 bg-neutral text-base-content">
-        <aside>
-            <p>Copyright © 2024 - Some rights reserved by Emperor Bob</p>
-        </aside>
-    </footer>
+    <%- include("../partials/footer") %>
 
     <script type="module">
         document.addEventListener('DOMContentLoaded', () => {
@@ -68,7 +68,7 @@
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src='./script.js' type="module"></script>
+    <script src='./investing/script.js' type="module"></script>
 </body>
 
 </html>

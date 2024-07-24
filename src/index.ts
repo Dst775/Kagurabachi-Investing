@@ -16,17 +16,51 @@ const limiter = rateLimit({
     message: { msg: "Rate Limited." }
 });
 
+app.set('view engine', 'ejs');
 app.use(limiter);
 app.use(express.json({ limit: '1kb' }));
-app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use("/auth", AuthRoute);
 app.use("/admin", AdminRoute);
 app.use("/stocks", StockRoute);
 
 app.get('/', (req: Request, res: Response) => {
-    res.send('Test Route');
+    res.render("pages/home", {
+        auth: { loggedIn: true }
+    });
 });
+
+app.get('/canon', (req: Request, res: Response) => {
+    res.render("pages/canon", {
+        auth: { loggedIn: true }
+    });
+});
+
+app.get('/character', (req: Request, res: Response) => {
+    res.render("pages/character", {
+        auth: { loggedIn: true }
+    });
+});
+
+app.get('/investing', (req: Request, res: Response) => {
+    res.render("pages/investing", {
+        auth: { loggedIn: true }
+    });
+});
+
+app.get('/ocmaker', (req: Request, res: Response) => {
+    res.render("pages/ocmaker", {
+        auth: { loggedIn: true }
+    });
+});
+
+app.get('/ocmaker2', (req: Request, res: Response) => {
+    res.render("pages/ocmaker2", {
+        auth: { loggedIn: true }
+    });
+});
+
+app.use(express.static("public"));
 
 app.get("/stockData", async (req, res) => {
     return res.json(await getStockMarketStocksInOrder());
