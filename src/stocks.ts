@@ -1,6 +1,6 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import { jwtCheck, reqHasBody, isAnyArgUndefined, JwtPayload } from "./auth";
+import { jwtCheck, reqHasBody, isAnyArgUndefined, JwtPayload, STARTING_BALANCE } from "./auth";
 import { User } from './schemas/user';
 import { IStockMarket, StockMarket } from './schemas/stockMarket';
 import { canBuyStocks } from './admin';
@@ -55,14 +55,15 @@ router.post("/buyStock", reqHasBody, async (req, res) => {
         return res.status(403).json({ msg: "Something went wrong!" });
     }
     // Perform Safe Buying
+    const playerAdjustmentValue = await getPlayerAdjustmentValue();
     let costOfPurchase = 0;
     for (let i = 0; i < buyCount; i++) {
-        const stockVal = getStockAdjustedValue(stockData.stockValue, stockData.ownCount + i);
+        const stockVal = await getStockAdjustedValue(stockData.stockValue, stockData.ownCount + i, playerAdjustmentValue);
         costOfPurchase += stockVal;
     }
     // Ensure User has enough Funds
     if (userTemp.balance < costOfPurchase) {
-        return res.status(401).json({ msg: "Not enough Funds" });
+        return res.status(401).json({ msg: `Not enough Funds, need: ${costOfPurchase}` });
     }
     // Safe to buy now
     stockData.ownCount += buyCount;
@@ -108,11 +109,12 @@ router.post("/sellStock", reqHasBody, async (req, res) => {
         return res.status(403).json({ msg: "You don't own enough stocks to sell this many!" });
     }
     // Perform Safe Selling
+    const playerAdjustmentValue = await getPlayerAdjustmentValue();
     for (let i = 0; i < sellCount; i++) {
-        const stockVal = getStockAdjustedValue(stockData.stockValue, stockData.ownCount - 1);
+        const stockVal = await getStockAdjustedValue(stockData.stockValue, stockData.ownCount - 1, playerAdjustmentValue);
         // Safe to buy now
         stockData.ownCount--;
-        userTemp.balance += stockVal;
+        userTemp.balance += stockVal - 1; // -1 to avoid new user inflation
         userTemp.stocks[stockID]--;
     }
     // Save Changes
@@ -122,15 +124,42 @@ router.post("/sellStock", reqHasBody, async (req, res) => {
     return res.json({ msg: `Success.`, balance: userTemp?.balance });
 });
 
+async function getStockMarketValue(): Promise<number> {
+    const stocks = await StockMarket.find({});
+    const playerCount = await User.countDocuments();
+    const availableStocks = playerCount * 10;
+    let stockValue = 1; // Avoid divide by 0 issues
+    for (let i = 0; i < stocks.length; i++) {
+        stockValue += (Math.max(availableStocks - stocks[i].ownCount, 1)) * stocks[i].stockValue;
+    }
+    return stockValue;
+}
+
+export async function getPlayerAdjustmentValue(): Promise<number> {
+    // Anti Inflation
+    const playerCount = await User.countDocuments();
+    const startBalance = STARTING_BALANCE;
+    const expectedPlayerBalance = playerCount * startBalance;
+    const marketValue = await getStockMarketValue();
+    const playerAdjustmentValue = expectedPlayerBalance / marketValue * 2;
+    return playerAdjustmentValue;
+}
+
 /**
  * Calculates how much a stock is actually worth based on the own count.
  * @param baseValue 
  * @param ownCount 
  */
-export function getStockAdjustedValue(baseValue: number, ownCount: number): number {
+export async function getStockAdjustedValue(baseValue: number, ownCount: number, playerAdjustmentValue?: number): Promise<number> {
+    if (playerAdjustmentValue == undefined) {
+        playerAdjustmentValue = await getPlayerAdjustmentValue();
+    }
+
     const OWN_JUMP = 5; // Number of owns to change value
-    const JUMP_MULTIPLIER = 2; // Number to change by per JUMP
-    return baseValue + JUMP_MULTIPLIER * Math.floor(ownCount / OWN_JUMP);
+    const JUMP_MULTIPLIER = 1.5; // Number to change by per JUMP
+
+    const floatValue = Math.max(baseValue + JUMP_MULTIPLIER * Math.floor(ownCount / OWN_JUMP) - playerAdjustmentValue, 1.5);
+    return Math.round(floatValue * 100) / 100;
 }
 
 export async function getStockMarketStocksInOrder(): Promise<IStockMarket[]> {

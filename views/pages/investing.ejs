@@ -42,9 +42,14 @@
             </section>
         </div>
         <div id="loggedInArea" class="blockedArea">
-            <!-- <div id="loggedInArea"> -->
             <div id="loggedInContainer">
                 <h1 id="notLoggedInText">Must be Logged In</h1>
+            </div>
+            <div class="join">
+                <button class="join-item btn btn-success" id="hideAllStocks">Hide All Stocks</button>
+                <button class="join-item btn btn-success" id="showAllStocks">Show All Stocks</button>
+                <button class="join-item btn btn-success" id="toggleOwnedStocks">Toggle Owned Stocks</button>
+                <button class="join-item btn btn-success" id="toggleUnownedStocks">Toggle Unowned Stocks</button>
             </div>
             <p class="text-4xl">Balance: $<span id="balanceText">0</span></p>
             <div class="join">
@@ -57,15 +62,31 @@
                 </div>
             </div>
             <div id="stockContainer"></div>
+            <div class="alert alert-warning sm:w-3/4 md:w-2/5 w-1/5 m-auto text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <p>Sell value is $1 less than the buy value.</p>
+            </div>
+            <div class="alert alert-warning sm:w-3/4 md:w-2/5 w-1/5 m-auto text-center mt-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <p>Price changes every 5 stocks so value seen may not be accurate.</p>
+            </div>
         </div>
     </main>
 
     <%- include("../partials/footer") %>
 
     <script type="module">
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById("investingNav").classList.add("navSelected");
-        });
+            document.addEventListener('DOMContentLoaded', () => {
+                document.getElementById("investingNav").classList.add("navSelected");
+            });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src='./investing/script.js' type="module"></script>

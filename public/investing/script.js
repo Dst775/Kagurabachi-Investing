@@ -59,6 +59,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Buying/Selling Slider
     const buySellCount = document.getElementById("buyCount");
     buySellCount.oninput = () => { updateSliderDisplay(buySellCount, "buySellDisplay") };
+
+    document.getElementById("hideAllStocks").addEventListener("click", hideAllStocks);
+    document.getElementById("showAllStocks").addEventListener("click", showAllStocks);
+    document.getElementById("toggleOwnedStocks").addEventListener("click", toggleOwnedStocks);
+    document.getElementById("toggleUnownedStocks").addEventListener("click", toggleUnownedStocks);
 });
 
 function createChart(data) {
@@ -194,6 +199,42 @@ function handleLeave() {
     chart.update();
 }
 
+function hideAllStocks() {
+    datasets.forEach((data, i) => {
+        chart.setDatasetVisibility(i, false);
+    });
+    chart.update();
+}
+
+function showAllStocks() {
+    datasets.forEach((data, i) => {
+        chart.setDatasetVisibility(i, true);
+    });
+    chart.update();
+}
+
+let ownedVisibility = true;
+function toggleOwnedStocks() {
+    ownedVisibility = !ownedVisibility;
+    stockCounts.forEach((count, i) => {
+        if (count != 0) {
+            chart.setDatasetVisibility(i, ownedVisibility);
+        }
+    });
+    chart.update();
+}
+
+let unownedVisibility = true;
+function toggleUnownedStocks() {
+    unownedVisibility = !unownedVisibility;
+    stockCounts.forEach((count, i) => {
+        if (count == 0) {
+            chart.setDatasetVisibility(i, unownedVisibility);
+        }
+    });
+    chart.update();
+}
+
 async function loadIndividualData() {
     if (!Globals.isLoggedIn() || stockData == undefined) {
         return;
@@ -311,16 +352,17 @@ function createStockElement(stock, stockNumber) {
     p.appendChild(span);
 
     const buyButton = document.createElement("button");
-    buyButton.classList.add("btn", "btn-info");
+    buyButton.classList.add("btn", "btn-info", "join-item");
     buyButton.innerText = "Buy";
     buyButton.addEventListener("click", () => { buyStock(stockNumber) });
 
     const sellButton = document.createElement("button");
-    sellButton.classList.add("btn", "btn-error");
+    sellButton.classList.add("btn", "btn-error", "join-item");
     sellButton.innerText = "Sell";
     sellButton.addEventListener("click", () => { sellStock(stockNumber) });
 
     const buttonContainer = document.createElement("div");
+    buttonContainer.classList.add("join");
     buttonContainer.appendChild(buyButton);
     buttonContainer.appendChild(sellButton);
 

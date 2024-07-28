@@ -143,6 +143,5 @@ stock-option div {
 }
 
 stock-option button {
-    width: 40%;
     border: 2px solid black !important;
 }

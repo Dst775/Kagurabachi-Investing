@@ -13,6 +13,7 @@ export interface JwtPayload {
 };
 const SALT_ROUNDS = 10;
 const badWordsFilter = new Filter();
+export const STARTING_BALANCE = 500;
 
 router.use(cookieParser());
 
@@ -44,7 +45,7 @@ router.post("/register", reqHasBody, async (req, res) => {
     await User.insertMany({
         name: inputs.name,
         password: hashedPassword,
-        balance: 500,
+        balance: STARTING_BALANCE,
         stocks: new Array(12).fill(0)
     });
     return res.status(200).json({ msg: "Success" });

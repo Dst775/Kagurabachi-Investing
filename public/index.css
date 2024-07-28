@@ -59,13 +59,17 @@ body {
 footer {
     /* background-image: url("./images/StripedImage.png");
     background-size: 1%; */
-    background: repeating-linear-gradient(-45deg,
+    /* background: repeating-linear-gradient(-45deg,
             #111,
             #111 5px,
-            #2a323c 5px,
-            #2a323c 12.5px);
-    animation: move-background-horizontal 300s linear infinite;
+            #47586c 5px,
+            #47586c 12.5px); */
     font-weight: bold;
+    margin-top: 1vh;
+}
+
+footer p {
+    text-shadow: 0px 0px 0.4em rgba(0, 0, 0, 1);
 }
 
 /* Navbar */
@@ -248,7 +252,7 @@ iframe {
 }
 
 main .btn:hover {
-    box-shadow: -0.0 0.0 0.5em rgba(0, 0, 0, 1);
+    box-shadow: -0.0 0.0 0.2em rgba(0, 0, 0, 1);
     scale: 103%;
 }
 
