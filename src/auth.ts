@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import cookieParser from 'cookie-parser';
 import jwt from 'jsonwebtoken';
 import Filter from 'bad-words';
+import { incrementUsers, userCount } from '.';
 
 export const router = express.Router();
 export interface JwtPayload {
@@ -13,7 +14,7 @@ export interface JwtPayload {
 };
 const SALT_ROUNDS = 10;
 const badWordsFilter = new Filter();
-export const STARTING_BALANCE = 500;
+export const STARTING_BALANCE = 1000;
 
 router.use(cookieParser());
 
@@ -48,6 +49,7 @@ router.post("/register", reqHasBody, async (req, res) => {
         balance: STARTING_BALANCE,
         stocks: new Array(12).fill(0)
     });
+    incrementUsers();
     return res.status(200).json({ msg: "Success" });
 });
 

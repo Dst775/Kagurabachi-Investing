@@ -3,8 +3,9 @@ import { rateLimit } from 'express-rate-limit'
 import 'dotenv/config';
 import { router as AuthRoute, connectToDB } from './auth';
 import { router as AdminRoute, loadAdmin } from './admin';
-import { getPlayerAdjustmentValue, getStockAdjustedValue, getStockMarketStocksInOrder, router as StockRoute } from './stocks';
+import { getStockAdjustedValue, getStockMarketStocksInOrder, router as StockRoute } from './stocks';
 import { StockMarket } from './schemas/stockMarket';
+import { User } from './schemas/user';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,6 +16,7 @@ const limiter = rateLimit({
     legacyHeaders: false,
     message: { msg: "Rate Limited." }
 });
+export let userCount = 0;
 
 app.set('view engine', 'ejs');
 app.use(limiter);
@@ -69,10 +71,9 @@ app.get("/stockData", async (req, res) => {
 app.get("/stockValues", async (req, res) => {
     const stocks = await getStockMarketStocksInOrder();
     const values: number[] = [];
-    const playerAdjustmentValue = await getPlayerAdjustmentValue();
     for (let i = 0; i < stocks.length; i++) {
         const stock = stocks[i];
-        values.push(await getStockAdjustedValue(stock.stockValue, stock.ownCount, playerAdjustmentValue));
+        values.push(await getStockAdjustedValue(stock.stockValue, stock.ownCount));
     }
     return res.json({ values: values });
 });
@@ -82,8 +83,19 @@ app.get("/numChaps", async (req, res) => {
     return res.json({ count: stock?.stockValues.length || 0 });
 });
 
+async function dailyIncome() {
+    console.log("Daily!");
+    await User.updateMany({}, { $inc: { balance: 100 } }); // $100 everyday!
+}
+
+export function incrementUsers() {
+    userCount++;
+}
+
 app.listen(PORT, async () => {
     await connectToDB();
     await loadAdmin();
+    userCount = await User.countDocuments();
+    setInterval(dailyIncome, 24 * 60 * 60 * 1000); // Every 24 Hours
     console.log(`Server is running http://localhost:${PORT}`);
 });

@@ -23,14 +23,13 @@ router.get("/adminPanel", async (req, res) => {
 
 router.get("/turnOffStocks", async (req, res) => {
     adminInfo.canBuyStocks = false;
-    adminInfo.save();
+    await adminInfo.save();
     return res.json({ msg: "Success!" });
 });
 
-
 router.get("/turnOnStocks", async (req, res) => {
     adminInfo.canBuyStocks = true;
-    adminInfo.save();
+    await adminInfo.save();
     return res.json({ msg: "Success!" });
 });
 
@@ -48,17 +47,17 @@ router.post("/updateStocks", reqHasBody, async (req, res) => {
         const currentStock = stocks[i];
         currentStock.stockValues.push(currentStock.stockValue);
         currentStock.stockValue += stockValues[i]; // Relative Update
-        currentStock.save();
+        await currentStock.save();
     }
 
     return res.json({ msg: "Success" });
 });
 
-// router.get("/resetStocks", async (req, res) => {
-//     await StockMarket.updateMany({}, { ownCount: 0 });
-//     await User.updateMany({}, { balance: STARTING_BALANCE, stocks: new Array(12).fill(0) });
-//     return res.json({ msg: "Success" });
-// });
+router.get("/resetStocks", async (req, res) => {
+    await StockMarket.updateMany({}, { ownCount: 0 });
+    await User.updateMany({}, { balance: STARTING_BALANCE, stocks: new Array(12).fill(0) });
+    return res.json({ msg: "Success" });
+});
 
 router.get("/setStocks", async (req, res) => {
     const stocks = await getStockMarketStocksInOrder();
@@ -538,7 +537,7 @@ router.get("/setStocks", async (req, res) => {
         stock.stockValues = stockData[i];
         stock.stockValue = lastValue;
         // stock.stockValues = [];
-        stock.save();
+        await stock.save();
     }
     res.json({ msg: "Success" });
 });
