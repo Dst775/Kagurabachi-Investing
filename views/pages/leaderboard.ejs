@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Leaderboard</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./styles.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./query.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./index.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./leaderboard/styles.css'>
+    <script>
+        let loggedIn = <%= auth.loggedIn %>
+    </script>
+    <script src='main.js' type="module"></script>
+    <script src='leaderboard/script.js' type="module"></script>
+</head>
+
+<body>
+    <div class="toast toast-end toastParent">
+        <div id="globalToastContainer">
+        </div>
+    </div>
+    <header id="header">
+        <%- include("../partials/header"); %>
+    </header>
+
+    <main class="text-center items-center flex flex-col">
+        <a href="/investing"><button class="btn btn-info mb-2">Investing</button></a>
+        <table id="leaderboardTable" class="table table-zebra">
+            <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Estimated Portfolio + Balance</th>
+            </tr>
+        </table>
+    </main>
+
+    <%- include("../partials/footer") %>
+</body>
+
+</html>

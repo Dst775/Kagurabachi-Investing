@@ -167,7 +167,7 @@ export async function getStockAdjustedValue(baseValue: number, ownCount: number/
     //     // playerAdjustmentValue = await getPlayerAdjustmentValue();
     // }
 
-    const OWN_JUMP = 10; // Number of owns to change value
+    const OWN_JUMP = 15; // Number of owns to change value
     const JUMP_MULTIPLIER = 1.5; // Number to change by per JUMP
 
     // const floatValue = Math.max(baseValue + JUMP_MULTIPLIER * Math.floor(ownCount / OWN_JUMP) - playerAdjustmentValue, 1.5);

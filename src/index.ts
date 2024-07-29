@@ -1,11 +1,13 @@
 import express, { Request, Response } from 'express';
 import { rateLimit } from 'express-rate-limit'
+import { CronJob, sendAt } from 'cron';
 import 'dotenv/config';
 import { router as AuthRoute, connectToDB } from './auth';
 import { router as AdminRoute, loadAdmin } from './admin';
 import { getStockAdjustedValue, getStockMarketStocksInOrder, router as StockRoute } from './stocks';
 import { StockMarket } from './schemas/stockMarket';
 import { User } from './schemas/user';
+import { StringLiteral } from 'typescript';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,6 +19,10 @@ const limiter = rateLimit({
     message: { msg: "Rate Limited." }
 });
 export let userCount = 0;
+export interface LeaderboardEntry {
+    name: string;
+    portfolio: number;
+}
 
 app.set('view engine', 'ejs');
 app.use(limiter);
@@ -62,6 +68,12 @@ app.get('/ocmaker2', (req: Request, res: Response) => {
     });
 });
 
+app.get('/leaderboard', (req: Request, res: Response) => {
+    res.render("pages/leaderboard", {
+        auth: { loggedIn: true }
+    });
+});
+
 app.use(express.static("public"));
 
 app.get("/stockData", async (req, res) => {
@@ -78,6 +90,24 @@ app.get("/stockValues", async (req, res) => {
     return res.json({ values: values });
 });
 
+app.get("/stockLeaderboard", async (req, res) => {
+    const users = await User.find({});
+    const stocks = await getStockMarketStocksInOrder();
+    const leaderboardArr: LeaderboardEntry[] = [];
+    for (let i = 0; i < users.length; i++) {
+        const user = users[i];
+        const userStocks = user.stocks;
+        let portfolioBalance = user.balance;
+        for (let j = 0; j < stocks.length; j++) {
+            const stock = stocks[j];
+            const userStockCount = userStocks[j];
+            portfolioBalance += userStockCount * stock.stockValue;
+        }
+        leaderboardArr.push({ name: user.name, portfolio: portfolioBalance });
+    }
+    return res.json(leaderboardArr);
+});
+
 app.get("/numChaps", async (req, res) => {
     const stock = await StockMarket.findOne({});
     return res.json({ count: stock?.stockValues.length || 0 });
@@ -88,6 +118,19 @@ async function dailyIncome() {
     await User.updateMany({}, { $inc: { balance: 100 } }); // $100 everyday!
 }
 
+const job = new CronJob(
+    '0 0 * * *', // cronTime, midnight
+    function () {
+        dailyIncome();
+    }, // onTick
+    null, // onComplete
+    true, // start
+    'America/Los_Angeles' // timeZone
+);
+
+const dt = sendAt('0 0 * * *');
+console.log(`Daily at: ${dt.toISO()}`);
+
 export function incrementUsers() {
     userCount++;
 }
@@ -96,6 +139,6 @@ app.listen(PORT, async () => {
     await connectToDB();
     await loadAdmin();
     userCount = await User.countDocuments();
-    setInterval(dailyIncome, 24 * 60 * 60 * 1000); // Every 24 Hours
+    // setInterval(dailyIncome, 24 * 60 * 60 * 1000); // Every 24 Hours
     console.log(`Server is running http://localhost:${PORT}`);
 });

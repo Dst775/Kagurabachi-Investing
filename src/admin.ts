@@ -18,6 +18,7 @@ router.get("/test", (req, res) => {
 });
 
 router.get("/adminPanel", async (req, res) => {
+    await loadAdmin();
     return res.json({ canBuyStocks: adminInfo.canBuyStocks });
 });
 

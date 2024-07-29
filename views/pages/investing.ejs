@@ -29,6 +29,7 @@
     <!-- <main class="text-center items-start flex flex-row"> -->
     <main class="text-center items-center flex flex-col">
         <div>
+            <a href="/leaderboard"><button class="btn btn-info mb-2">Leaderboard</button></a>
             <div id="barWrapper">
                 <canvas id="barGraph"></canvas>
             </div>
@@ -45,11 +46,11 @@
             <div id="loggedInContainer">
                 <h1 id="notLoggedInText">Must be Logged In</h1>
             </div>
-            <div class="join">
-                <button class="join-item btn btn-success" id="hideAllStocks">Hide All Stocks</button>
-                <button class="join-item btn btn-success" id="showAllStocks">Show All Stocks</button>
-                <button class="join-item btn btn-success" id="toggleOwnedStocks">Toggle Owned Stocks</button>
-                <button class="join-item btn btn-success" id="toggleUnownedStocks">Toggle Unowned Stocks</button>
+            <div class="md:join md:join-horizontal">
+                <button class="join-item btn btn-success mb-1" id="hideAllStocks">Hide All Stocks</button>
+                <button class="join-item btn btn-success mb-1" id="showAllStocks">Show All Stocks</button>
+                <button class="join-item btn btn-success mb-1" id="toggleOwnedStocks">Toggle Owned Stocks</button>
+                <button class="join-item btn btn-success mb-1" id="toggleUnownedStocks">Toggle Unowned Stocks</button>
             </div>
             <p class="text-4xl">Balance: $<span id="balanceText">0</span></p>
             <div class="join">
@@ -62,7 +63,7 @@
                 </div>
             </div>
             <div id="stockContainer"></div>
-            <div class="alert alert-warning sm:w-3/4 md:w-2/5 w-1/5 m-auto text-center">
+            <div class="alert alert-warning sm:w-3/4 md:w-3/5 lg:w-2/6 m-auto text-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
                     viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -70,7 +71,7 @@
                 </svg>
                 <p>Sell value is $1 less than the buy value.</p>
             </div>
-            <div class="alert alert-warning sm:w-3/4 md:w-2/5 w-1/5 m-auto text-center mt-2">
+            <div class="alert alert-warning sm:w-3/4 md:w-3/5 lg:w-2/6 m-auto text-center mt-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
                     viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

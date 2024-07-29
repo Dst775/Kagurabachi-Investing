@@ -126,6 +126,7 @@ stock-option {
     color: black;
     border-radius: 1em;
     width: 20%;
+    min-width: 200px;
 }
 
 stock-option>#stockName {
