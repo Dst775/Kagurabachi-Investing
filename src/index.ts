@@ -7,7 +7,7 @@ import { router as AdminRoute, loadAdmin } from './admin';
 import { getStockAdjustedValue, getStockMarketStocksInOrder, router as StockRoute } from './stocks';
 import { StockMarket } from './schemas/stockMarket';
 import { User } from './schemas/user';
-import { StringLiteral } from 'typescript';
+import { cacheSeconds } from 'route-cache';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -80,7 +80,7 @@ app.get("/stockData", async (req, res) => {
     return res.json(await getStockMarketStocksInOrder());
 });
 
-app.get("/stockValues", async (req, res) => {
+app.get("/stockValues", cacheSeconds(10), async (req, res) => {
     const stocks = await getStockMarketStocksInOrder();
     const values: number[] = [];
     for (let i = 0; i < stocks.length; i++) {
@@ -90,7 +90,7 @@ app.get("/stockValues", async (req, res) => {
     return res.json({ values: values });
 });
 
-app.get("/stockLeaderboard", async (req, res) => {
+app.get("/stockLeaderboard", cacheSeconds(20), async (req, res) => {
     const users = await User.find({});
     const stocks = await getStockMarketStocksInOrder();
     const leaderboardArr: LeaderboardEntry[] = [];
@@ -108,7 +108,7 @@ app.get("/stockLeaderboard", async (req, res) => {
     return res.json(leaderboardArr);
 });
 
-app.get("/numChaps", async (req, res) => {
+app.get("/numChaps", cacheSeconds(20), async (req, res) => {
     const stock = await StockMarket.findOne({});
     return res.json({ count: stock?.stockValues.length || 0 });
 });
@@ -128,17 +128,15 @@ const job = new CronJob(
     'America/Los_Angeles' // timeZone
 );
 
-const dt = sendAt('0 0 * * *');
-console.log(`Daily at: ${dt.toISO()}`);
-
 export function incrementUsers() {
     userCount++;
 }
 
 app.listen(PORT, async () => {
+    const dt = sendAt('0 0 * * *');
+    console.log(`Daily at: ${dt.toISO()}`);
     await connectToDB();
     await loadAdmin();
     userCount = await User.countDocuments();
-    // setInterval(dailyIncome, 24 * 60 * 60 * 1000); // Every 24 Hours
     console.log(`Server is running http://localhost:${PORT}`);
 });
