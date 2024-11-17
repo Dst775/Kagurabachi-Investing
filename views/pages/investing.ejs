@@ -43,9 +43,11 @@
             </section>
         </div>
         <div id="loggedInArea" class="blockedArea">
-            <div id="loggedInContainer">
-                <h1 id="notLoggedInText">Must be Logged In</h1>
-            </div>
+            <a href="#navbarPfp" onclick="document.getElementById('loginModal').showModal()">
+                <div id="loggedInContainer">
+                    <h1 id="notLoggedInText">Must be Logged In</h1>
+                </div>
+            </a>
             <div class="md:join md:join-horizontal">
                 <button class="join-item btn btn-success mb-1" id="hideAllStocks">Hide All Stocks</button>
                 <button class="join-item btn btn-success mb-1" id="showAllStocks">Show All Stocks</button>
@@ -85,9 +87,9 @@
     <%- include("../partials/footer") %>
 
     <script type="module">
-            document.addEventListener('DOMContentLoaded', () => {
-                document.getElementById("investingNav").classList.add("navSelected");
-            });
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById("investingNav").classList.add("navSelected");
+        });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src='./investing/script.js' type="module"></script>
