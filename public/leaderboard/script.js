@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         nameTD.innerText = entry.name;
 
         const valueTD = document.createElement("td");
-        valueTD.innerText = `$${entry.portfolio.toLocaleString()}`;
+        valueTD.innerText = `$${entry.portfolio.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
         tr.appendChild(rankTD);
         tr.appendChild(nameTD);
