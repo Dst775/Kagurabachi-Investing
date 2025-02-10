@@ -26,11 +26,11 @@ let chart;
 let stockCounts = [];
 /**@type {number[]} Stock values for Stock Listing UI*/
 let stockValues = [];
-
+const SUBTRACT = 0;
 document.addEventListener('DOMContentLoaded', async () => {
-    const latestChapter = 207 + (await (await fetch("/numChaps")).json()).count;
-    const chapterCount = latestChapter - 207 + 1;
-    for (let i = 207; i <= latestChapter; i++) {
+    const latestChapter = SUBTRACT + (await (await fetch("/numChaps")).json()).count;
+    const chapterCount = latestChapter - SUBTRACT + 1;
+    for (let i = SUBTRACT; i <= latestChapter; i++) {
         labels.push(i.toString());
     }
 
@@ -161,7 +161,7 @@ async function loadDataSet() {
 
 function updateChart() {
     const sliderMin = document.getElementById("minRange");
-    const minValue = parseInt(sliderMin.value) - 207;
+    const minValue = parseInt(sliderMin.value) - SUBTRACT;
     let trimmedLabels = labels.slice(minValue);
     for (let i = 0; i < datasets.length; i++) {
         datasets[i].data = originalDatasets[i].slice(minValue);

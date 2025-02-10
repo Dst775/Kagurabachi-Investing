@@ -15,8 +15,8 @@ export default {
       {
         light: {
           ...themes["dark"],
-          success: "#2CA3D4",
-          secondary: "#EF34B1"
+          success: "#EFEFEF",
+          secondary: "#f11e1e"
         },
       }
     ]
