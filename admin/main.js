@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function updateStocks() {
     const data = [];
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 1; i++) {
         data.push(parseInt(document.getElementById(`stock${i}Input`).value || "0"));
     }
     

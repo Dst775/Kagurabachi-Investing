@@ -555,7 +555,7 @@ export function adminCheckMiddleware(req: Request, res: Response, next: NextFunc
     const token = req.user;
     console.log(`${req.path}`, token);
     if (token) {
-        if (token.name === "EmperorBob") {
+        if (token.name === "EmperorBob" || token.name === "Avesta49") {
             return next();
         }
         return res.status(401).json({ msg: "Unauthorized Access" });
